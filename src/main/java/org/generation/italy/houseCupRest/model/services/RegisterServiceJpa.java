@@ -68,4 +68,36 @@ public class RegisterServiceJpa implements RegisterService{
     public Optional<Student> findStudentById(long id) {
         return studentRepo.findById(id);
     }
+    @Override
+    public Optional <Course> deleteCourseById(long id) {
+        if(courseRepo.findById(id).isPresent()){
+            Optional <Course> courseFidedById = courseRepo.findById(id);
+            courseRepo.deleteById(id);
+            return courseFidedById;
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Course> updateById(Course course) {
+        Optional<Course> oC = courseRepo.findById(course.getId());
+        if(oC.isPresent()){
+            Course existingCourse = oC.get();
+            existingCourse.setClassName(course.getClassName());
+            existingCourse.setStartDate(course.getStartDate());
+            existingCourse.setEndDate(course.getEndDate());
+            courseRepo.save(existingCourse);
+            return Optional.of(existingCourse);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Course> create(Course course) {
+//        if(courseRepo.existsById(course.getId())){
+//            return Optional.empty();
+//        }
+        Course courseSaved = courseRepo.save(course);
+        return Optional.of(courseSaved);
+    }
 }
