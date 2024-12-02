@@ -68,4 +68,13 @@ public class RegisterServiceJpa implements RegisterService{
     public Optional<Student> findStudentById(long id) {
         return studentRepo.findById(id);
     }
+
+    @Override
+    public Boolean deleteCourseById(long id){
+        if(courseRepo.existsById(id)){
+            courseRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

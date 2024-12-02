@@ -18,4 +18,5 @@ public interface RegisterService{
     List<Teacher> findAllTeachers(); // ricordiamo di implementare teacher
     Student saveStudent(Student s);
     Optional<Student> findStudentById(long id);
+    Boolean deleteCourseById(long id);
 }

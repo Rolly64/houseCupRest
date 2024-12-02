@@ -6,10 +6,7 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +34,13 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(new CourseDetailDto(oC.get()));
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable long id){
+        var ifDeleted = regService.deleteCourseById(id);
+        if(!ifDeleted){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(true);
     }
 }
