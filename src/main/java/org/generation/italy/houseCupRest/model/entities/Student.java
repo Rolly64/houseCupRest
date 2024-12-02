@@ -31,7 +31,7 @@ public class  Student {
     @JoinColumn(name="house_id")
     private House house;
     @OneToMany(mappedBy = "student")
-    private List<Score> scoreList;
+    private List<Score> scores;
 
     public Student() {
     }
@@ -50,7 +50,7 @@ public class  Student {
         this.isPref = isPref;
         this.course = course;
         this.house = house;
-        this.scoreList = scoreList;
+        this.scores = scoreList;
     }
 
     public long getId() {
@@ -146,11 +146,11 @@ public class  Student {
         this.house = house;
     }
 
-    public List<Score> getScoreList() {
-        return scoreList;
+    public List<Score> getScores() {
+        return scores;
     }
 
-    public void setScoreList(List<Score> scoreList) {
-        this.scoreList = scoreList;
+    public void setScores(List<Score> scores) {
+        this.scores = scores;
     }
 }
