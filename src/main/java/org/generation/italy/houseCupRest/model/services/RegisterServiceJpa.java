@@ -50,7 +50,7 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Teacher> findAllTeachers() { // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
+    public List<Teacher> findAllTeachers() {
         return teacherRepo.findAll();
     }
 
