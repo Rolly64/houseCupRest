@@ -1,5 +1,7 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.dtos.CourseDto;
+import org.generation.italy.houseCupRest.exception.EntityException;
 import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
@@ -19,4 +21,5 @@ public interface RegisterService{
     Student saveStudent(Student s);
     Optional<Student> findStudentById(long id);
     boolean deleteCourseById(long id) throws EntityException;
+    void updateCourse(Course course);
 }

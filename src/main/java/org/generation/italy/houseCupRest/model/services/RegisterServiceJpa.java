@@ -1,5 +1,7 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.generation.italy.houseCupRest.exception.EntityException;
 import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
@@ -69,5 +71,27 @@ public class RegisterServiceJpa implements RegisterService{
         return studentRepo.findById(id);
     }
 
+    @Override
+    public boolean deleteCourseById(long id) throws EntityException{
+        try {
+            var oc = courseRepo.findById(id); // Cerca il corso nel repository
+            if (oc.isEmpty()) { // Se il corso non esiste
+                return false; // Restituisce false, indicando che il corso non è stato trovato
+            }
+            courseRepo.delete(oc.get()); // Elimina il corso
+            return true; // Restituisce true, indicando che il corso è stato cancellato con successo
+        } catch (EntityException e) {
+            // Gestisce qualsiasi eccezione che possa essere lanciata
+            throw new EntityException(e.getMessage());
+        }
 
+    }
+
+    @Override
+    public void updateCourse(Course course) {
+        if (!courseRepo.existsById(course.getId())) {
+            throw new EntityNotFoundException("Corso non trovato");
+        }
+        courseRepo.save(course);
+    }
 }

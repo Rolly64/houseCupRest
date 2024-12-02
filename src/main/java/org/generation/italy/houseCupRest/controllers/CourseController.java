@@ -8,17 +8,21 @@ import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/course")
 public class CourseController {
-
+    @Autowired
     private RegisterService regService;
 
-    @Autowired
+
     public CourseController(RegisterService regService) {
         this.regService = regService;
     }
@@ -34,13 +38,11 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseDetailDto> findById(@PathVariable long id) {
         var oC = regService.findCourseById(id);
-        if (oC.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(new CourseDetailDto(oC.get()));
+        return oC.map(course -> ResponseEntity.ok(new CourseDetailDto(course)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable long id) {
         try {
             boolean success = regService.deleteCourseById(id);
@@ -51,6 +53,20 @@ public class CourseController {
             }
         } catch (EntityException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateById(@PathVariable long id,@RequestBody CourseDto courseDto){
+        Optional<Course> existingCourse = regService.findCourseById(id);
+        if(existingCourse.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            Course courseToUpdate = existingCourse.get();
+            courseToUpdate.setClassName(courseDto.getClassName());
+            courseToUpdate.setStartDate(LocalDate.parse(courseDto.getStartDate()));
+            courseToUpdate.setEndDate(LocalDate.parse(courseDto.getEndDate()));
+            regService.updateCourse(courseToUpdate);
+            return ResponseEntity.noContent().build();
         }
     }
 }
