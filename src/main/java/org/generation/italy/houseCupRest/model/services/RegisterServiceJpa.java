@@ -1,7 +1,5 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.generation.italy.houseCupRest.exception.EntityException;
 import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
@@ -13,6 +11,7 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +31,7 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Course> getAllCourses() {
+    public List<Course> findAllCourses() {
         return courseRepo.findAll();
     }
 
@@ -70,28 +69,49 @@ public class RegisterServiceJpa implements RegisterService{
     public Optional<Student> findStudentById(long id) {
         return studentRepo.findById(id);
     }
+    @Override
+    public Optional <Course> deleteCourseById(long id) {
+//        if(courseRepo.findById(id).isPresent()){
+//            Optional <Course> courseFidedById = courseRepo.findById(id);
+//            courseRepo.deleteById(id);
+//            return courseFidedById;
+//        }
+//        return Optional.empty();
+            Optional<Course> oC = courseRepo.findById(id);
+            oC.ifPresent(course -> courseRepo.delete(course));
+            return oC;
+    }
+
 
     @Override
-    public boolean deleteCourseById(long id) throws EntityException{
-        try {
-            var oc = courseRepo.findById(id); // Cerca il corso nel repository
-            if (oc.isEmpty()) { // Se il corso non esiste
-                return false; // Restituisce false, indicando che il corso non è stato trovato
-            }
-            courseRepo.delete(oc.get()); // Elimina il corso
-            return true; // Restituisce true, indicando che il corso è stato cancellato con successo
-        } catch (EntityException e) {
-            // Gestisce qualsiasi eccezione che possa essere lanciata
-            throw new EntityException(e.getMessage());
+    public Optional<Course> updateCourse(Course course) {
+        Optional<Course> oC = courseRepo.findById(course.getId());
+        Course oldCourse = null;
+        if(oC.isPresent()){
+            oldCourse = new Course(oC.get().getId(),oC.get().getClassName(),oC.get().getStartDate(),oC.get().getEndDate());
+            courseRepo.save(course);
         }
-
+        return Optional.ofNullable(oldCourse);
     }
 
     @Override
-    public void updateCourse(Course course) {
-        if (!courseRepo.existsById(course.getId())) {
-            throw new EntityNotFoundException("Corso non trovato");
-        }
-        courseRepo.save(course);
+    public Course create(Course course) {
+        Course courseSaved = courseRepo.save(course);
+        return courseSaved;
+    }
+
+    @Override
+    public List<Course> findActiveCourseByNamesContains(String className) {
+        return courseRepo.findByStartDateBeforeAndEndDateAfterAndClassNameContains(LocalDate.now(),LocalDate.now(), className);
+    }
+
+    @Override
+    public List<Course> findByClassNameContains(String className) {
+        return courseRepo.findByClassNameContains(className);
+    }
+
+    @Override
+    public List<Course> findActiveCourses() {
+        return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
     }
 }

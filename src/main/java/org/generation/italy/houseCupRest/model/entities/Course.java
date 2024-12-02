@@ -31,6 +31,22 @@ public class Course {
         this.id = id;
         this.className = className;
     }
+    public Course(long id, String className, LocalDate startDate, LocalDate endDate) {
+        this(id, className);
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
 
     public long getId(){
         return id;

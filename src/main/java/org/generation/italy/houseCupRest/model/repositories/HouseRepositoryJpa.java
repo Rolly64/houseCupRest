@@ -7,11 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface HouseRepositoryJpa extends JpaRepository<House, Long> {
     @Query("""
-            SELECT SUM(sc.points) 
-            FROM House as h
+            SELECT SUM(sc.points)
+            FROM House AS h
             JOIN h.students st
             JOIN st.scores sc
             WHERE h.id = :houseId
             """)
-    int getTotalScoreByHouseId(@Param("houseId") long houseId);
+    Integer getTotalScoreByHouseId (@Param("houseId") long houseId);
 }

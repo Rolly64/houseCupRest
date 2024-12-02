@@ -7,5 +7,6 @@ import org.generation.italy.houseCupRest.model.entities.House;
 import java.util.List;
 
 public interface HouseService {
-    List<HouseRanking> getRankings();
+   List<HouseRanking> getRankings();
+
 }
