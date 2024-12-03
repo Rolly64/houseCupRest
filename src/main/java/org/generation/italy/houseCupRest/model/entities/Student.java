@@ -23,7 +23,7 @@ public class  Student {
     private String background;
     private String education;
     @Column(name = "is_pref")
-    private boolean isPref;
+    private Boolean isPref;
     @ManyToOne
     @JoinColumn(name="class_id")
     private Course course;
@@ -51,6 +51,14 @@ public class  Student {
         this.course = course;
         this.house = house;
         this.scores = scoreList;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setPref(Boolean pref) {
+        isPref = pref;
     }
 
     public long getId() {
@@ -153,4 +161,6 @@ public class  Student {
     public void setScores(List<Score> scores) {
         this.scores = scores;
     }
+
+
 }

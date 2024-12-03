@@ -1,9 +1,12 @@
 package org.generation.italy.houseCupRest.dtos;
 import org.generation.italy.houseCupRest.model.entities.Score;
+import org.generation.italy.houseCupRest.model.entities.Student;
+import org.generation.italy.houseCupRest.model.entities.Teacher;
 
 import java.time.LocalDate;
 
 public class ScoreDto {
+    private long id;
     private int score;
     private String reason;
     private long studentId, teacherId;
@@ -11,7 +14,8 @@ public class ScoreDto {
 
     public ScoreDto() {
     }
-    public ScoreDto(int score, String reason, long studentId, long teacherId, LocalDate date) {
+    public ScoreDto(long id,int score, String reason, long studentId, long teacherId, LocalDate date) {
+        this.id=id;
         this.score = score;
         this.reason = reason;
         this.studentId = studentId;
@@ -19,6 +23,7 @@ public class ScoreDto {
         this.date = date;
     }
     public ScoreDto(Score s){
+        this.id=s.getId();
         this.score = s.getPoints();
         this.reason = s.getMotivation();
         this.studentId = s.getStudent().getId();
@@ -36,6 +41,14 @@ public class ScoreDto {
 
     public String getReason() {
         return reason;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setReason(String reason) {
@@ -65,4 +78,20 @@ public class ScoreDto {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public Score toScore() {
+        Score s = new Score();
+        s.setId(id);
+        s.setPoints(score);
+        s.setMotivation(reason);
+        s.setAssign_date(date);
+        Student student = new Student();
+        student.setId(studentId);
+        s.setStudent(student);
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        s.setTeacher(teacher);
+        return s;
+    }
+
 }
