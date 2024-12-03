@@ -7,4 +7,3 @@ public record HouseDto(long id, String name, int score) {
         return new HouseDto(hr.getHouse().getId(), hr.getHouse().getHouseName(), hr.getTotalScore());
     }
 }
-//.

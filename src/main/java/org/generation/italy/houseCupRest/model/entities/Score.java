@@ -24,7 +24,6 @@ public class Score {
     public Score(){
 
     }
-
     public Score(long id, int points, String motivation, LocalDate assign_date, Student student, Teacher teacher) {
         this.id = id;
         this.points = points;
@@ -33,7 +32,6 @@ public class Score {
         this.student = student;
         this.teacher = teacher;
     }
-
 
     public long getId() {
         return id;
