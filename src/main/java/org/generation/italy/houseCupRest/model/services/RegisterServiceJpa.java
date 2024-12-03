@@ -11,6 +11,7 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Course> getAllCourses() {
+    public List<Course> findAllCourses() {
         return courseRepo.findAll();
     }
 
@@ -47,6 +48,11 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public Optional<House> findHouseById(long id) {
         return houseRepo.findById(id);
+    }
+
+    @Override
+    public Optional<Teacher> findTeacherById(long id) {
+        return teacherRepo.findById(id);
     }
 
     @Override
@@ -67,5 +73,51 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public Optional<Student> findStudentById(long id) {
         return studentRepo.findById(id);
+    }
+    @Override
+    public Optional <Course> deleteCourseById(long id) {
+//        if(courseRepo.findById(id).isPresent()){
+//            Optional <Course> courseFidedById = courseRepo.findById(id);
+//            courseRepo.deleteById(id);
+//            return courseFidedById;
+//        }
+//        return Optional.empty();
+            Optional<Course> oC = courseRepo.findById(id);
+            oC.ifPresent(course -> courseRepo.delete(course));
+            return oC;
+    }
+
+
+    @Override
+    public Optional<Course> updateCourse(Course course) {
+        Optional<Course> oC = courseRepo.findById(course.getId());
+        Course oldCourse = null;
+        if(oC.isPresent()){
+            oldCourse = new Course(oC.get().getId(),oC.get().getClassName(),oC.get().getStartDate(),oC.get().getEndDate());
+            courseRepo.save(course);
+        }
+        return Optional.ofNullable(oldCourse);
+    }
+
+    @Override
+    public Course create(Course course) {
+        Course courseSaved = courseRepo.save(course);
+        return courseSaved;
+    }
+
+
+    @Override
+    public List<Course> findActiveCourseByNamesContains(String className) {
+        return courseRepo.findByStartDateBeforeAndEndDateAfterAndClassNameContains(LocalDate.now(),LocalDate.now(), className);
+    }
+
+    @Override
+    public List<Course> findByClassNameContains(String className) {
+        return courseRepo.findByClassNameContains(className);
+    }
+
+    @Override
+    public List<Course> findActiveCourses() {
+        return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
     }
 }
