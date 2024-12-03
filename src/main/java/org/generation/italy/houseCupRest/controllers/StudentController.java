@@ -29,4 +29,14 @@ public class StudentController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/{id}/weeklyScores")
+    ResponseEntity<?> getStudentWeeklyScores(@PathVariable long id) {
+        try {
+            List<Score> scores = scoreService.findStudentWeeklyScores(id);
+            List<ScoreDto> dtos = scores.stream().map(ScoreDto::new).toList();
+            return ResponseEntity.ok(dtos);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }

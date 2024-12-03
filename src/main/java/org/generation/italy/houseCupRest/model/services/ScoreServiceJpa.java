@@ -11,7 +11,11 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +59,6 @@ public class ScoreServiceJpa implements ScoreService{
         scoreRepositoryJpa.save(score);
         return score;
     }
-
     @Override
     public Score updateScore(Score score) throws IdDoesNotExistException {
         Optional<Score> opScore = scoreRepositoryJpa.findById(score.getId());
@@ -66,7 +69,6 @@ public class ScoreServiceJpa implements ScoreService{
         scoreRepositoryJpa.save(scr);
         return scr;
     }
-
     @Override
     public void deleteScore(long id) throws IdDoesNotExistException {
         Optional<Score> opScore = scoreRepositoryJpa.findById(id);
@@ -76,7 +78,6 @@ public class ScoreServiceJpa implements ScoreService{
         Score sc = opScore.get();
         scoreRepositoryJpa.delete(sc);
     }
-
     @Override
     public List<Score> findStudentScores(long id) throws EntityNotFoundException {
         Optional<Student> opStudent = studentRepo.findById(id);
@@ -84,6 +85,15 @@ public class ScoreServiceJpa implements ScoreService{
             throw new EntityNotFoundException("student not found", opStudent.getClass().getSimpleName());
         }
         return scoreRepositoryJpa.findByStudentId(id);
+    }
+
+    @Override
+    public List<Score> findStudentWeeklyScores(long id) throws EntityNotFoundException {
+        Optional<Student> opStudent = studentRepo.findById(id);
+        if (opStudent.isEmpty()) {
+            throw new EntityNotFoundException("student not found", opStudent.getClass().getSimpleName());
+        }
+        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now(), LocalDate.now().plus(Period.ofDays(7)));
     }
 
 
