@@ -99,6 +99,10 @@ public class Teacher {
         return phone;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setPhone(String phone) {
         this.phone = phone;
     }

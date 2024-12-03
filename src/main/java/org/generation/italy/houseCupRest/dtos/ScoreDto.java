@@ -1,5 +1,4 @@
 package org.generation.italy.houseCupRest.dtos;
-
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
@@ -11,42 +10,25 @@ public class ScoreDto {
     private int score;
     private String reason;
     private long studentId, teacherId;
-    private LocalDate localDate;
+    private LocalDate date;
 
-    public ScoreDto(){
+    public ScoreDto() {
     }
-
-    public ScoreDto(long id, int score, String reason, long studentId, long teacherId, LocalDate localDate) {
-        this.id = id;
+    public ScoreDto(long id,int score, String reason, long studentId, long teacherId, LocalDate date) {
+        this.id=id;
         this.score = score;
         this.reason = reason;
         this.studentId = studentId;
         this.teacherId = teacherId;
-        this.localDate = localDate;
+        this.date = date;
     }
-
     public ScoreDto(Score s){
-        this.id = s.getId();
+        this.id=s.getId();
         this.score = s.getPoints();
         this.reason = s.getMotivation();
         this.studentId = s.getStudent().getId();
         this.teacherId = s.getTeacher().getId();
-        this.localDate = s.getAssign_date();
-    }
-
-    public Score toScore(){
-        Score newScore = new Score();
-        newScore.setId(id);
-        newScore.setPoints(score);
-        newScore.setMotivation(reason);
-        Student student = new Student();
-        student.setId(studentId);
-        newScore.setStudent(student);
-        Teacher teacher = new Teacher();
-        teacher.setId(teacherId);
-        newScore.setTeacher(teacher);
-        newScore.setAssign_date(localDate);
-        return newScore;
+        this.date = s.getAssign_date();
     }
 
     public int getScore() {
@@ -59,6 +41,14 @@ public class ScoreDto {
 
     public String getReason() {
         return reason;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setReason(String reason) {
@@ -81,19 +71,27 @@ public class ScoreDto {
         this.teacherId = teacherId;
     }
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
-    public long getId() {
-        return id;
+    public  Score toScore() {
+        Score s = new Score();
+        s.setId(id);
+        s.setPoints(score);
+        s.setMotivation(reason);
+        s.setAssign_date(date);
+        Student student = new Student();
+        student.setId(studentId);
+        s.setStudent(student);
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherId);
+        s.setTeacher(teacher);
+        return s;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 }
