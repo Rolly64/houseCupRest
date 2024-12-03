@@ -1,10 +1,7 @@
 package org.generation.italy.houseCupRest.controllers;
 import jakarta.persistence.EntityNotFoundException;
-import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
-import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
-import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
