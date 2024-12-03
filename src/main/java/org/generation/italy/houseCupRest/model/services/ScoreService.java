@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 
 import java.util.List;
@@ -13,4 +12,7 @@ public interface ScoreService {
     List<Score> getAllScore();
     Optional<Score> updateScore(Score score);
     Optional<Score> deleteScoreById(long id);
+    Score saveScore(Score score, long studentId, long teacherId);
+    List<Score> findPointsByStudentId(long studentId);
+    List<Score> findStudentWeekScores(long studentId);
 }

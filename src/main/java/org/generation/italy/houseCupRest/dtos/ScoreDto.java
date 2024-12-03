@@ -79,7 +79,7 @@ public class ScoreDto {
         this.date = date;
     }
 
-    public Score toScore() {
+    public  Score toScore() {
         Score s = new Score();
         s.setId(id);
         s.setPoints(score);
