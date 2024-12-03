@@ -1,16 +1,19 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
-import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
 import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,5 +76,13 @@ public class ScoreServiceJpa implements ScoreService{
         return Optional.empty(); // Se non trovato, restituisci Optional.empty
     }
 
+    @Override
+    public List<Score> findStudentScores(long id, LocalDate startDate,LocalDate endDate) throws EntityNotFoundException {
+        Optional<Student> optStudent = studentRepositoryJpa.findById(id);
+        if(optStudent.isEmpty()){
+            throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
+        }
+        return scoreRepositoryJpa.getAllScoresByStudentIdAndDateRange(id,startDate,endDate);
+    }
 
 }

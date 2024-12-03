@@ -1,9 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
-import org.generation.italy.houseCupRest.model.entities.House;
-import org.generation.italy.houseCupRest.model.entities.Student;
-import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.entities.*;
 
 import java.util.List;
 import java.util.Optional;

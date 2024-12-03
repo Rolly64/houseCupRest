@@ -125,8 +125,12 @@ public class  Student {
         return isPref;
     }
 
-    public void setIsPref(boolean isPref) {
-        this.isPref = isPref;
+    public void setIsPref(Boolean isPref) {
+        if (isPref == null) {
+            this.isPref = false;
+        } else {
+            this.isPref = isPref;
+        }
     }
 
     @JsonIgnore
