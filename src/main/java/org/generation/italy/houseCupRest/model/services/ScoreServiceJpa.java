@@ -93,7 +93,7 @@ public class ScoreServiceJpa implements ScoreService{
         if (opStudent.isEmpty()) {
             throw new EntityNotFoundException("student not found", opStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now(), LocalDate.now().plus(Period.ofDays(7)));
+        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus(Period.ofDays(7)), LocalDate.now());
     }
 
 
