@@ -24,7 +24,6 @@ public class ScoreServiceJpa implements ScoreService{
         this.scoreRepositoryJpa = scoreRepositoryJpa;
         this.studentRepositoryJpa = studentRepositoryJpa;
         this.teacherRepositoryJpa = teacherRepositoryJpa;
-
     }
 
     @Override
@@ -77,6 +76,11 @@ public class ScoreServiceJpa implements ScoreService{
         score.setTeacher(oT.get());
         scoreRepositoryJpa.save(score);
         return score;
+    }
+
+    @Override
+    public List<Score> findPointsByStudentId(long studentId) {
+        return scoreRepositoryJpa.findScoresByStudentId(studentId);
     }
 
 
