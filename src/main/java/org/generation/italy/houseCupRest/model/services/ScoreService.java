@@ -11,4 +11,5 @@ public interface ScoreService {
     Optional<Score> findById(long id);
     Optional<Score> updateScore(Score score);
     Optional<Score> deleteScoreById(long id);
+    Optional<Score> saveScore(Score score);
 }

@@ -44,4 +44,11 @@ public class ScoreServiceJpa implements ScoreService{
         oS.ifPresent(score -> scoreRepositoryJpa.delete(score));
         return oS;
     }
+
+    @Override
+    public Optional<Score> saveScore(Score score) {
+        scoreRepositoryJpa.save(score);
+
+        return Optional.empty();
+    }
 }
