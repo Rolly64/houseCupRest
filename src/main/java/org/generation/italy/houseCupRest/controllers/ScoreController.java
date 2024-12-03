@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -64,6 +66,24 @@ public class ScoreController {
 
         }catch (IdNotFound e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("{id}")
+        public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id,UriComponentsBuilder uriBuilder){
+            Optional<Score> isDeleted = scoreService.deleteById(id);
+            return isDeleted.map(score -> {
+                URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri();
+                return ResponseEntity.ok(ScoreDto.fromScore(score));
+            }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("{id}/score")
+    public ResponseEntity<?> getScores(@PathVariable long id, @RequestParam(required = false)LocalDate startDate,@RequestParam(required = false) LocalDate endDate) {
+        try {
+            List<Score> scores = scoreService.findStudentScores(id, startDate, endDate);
+            List<ScoreDto> scoresDto = scores.stream().map(ScoreDto::fromScore).toList();
+            return ResponseEntity.ok(scoresDto);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

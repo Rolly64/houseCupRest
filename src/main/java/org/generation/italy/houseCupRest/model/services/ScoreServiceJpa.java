@@ -9,8 +9,11 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,12 +60,29 @@ public class ScoreServiceJpa implements ScoreService{
     @Override
     public Optional<Score> updateScore(Score score) {
         Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
-        Score oldScore = null;
         if(oS.isPresent()){
-            oldScore = new Score(oS.get().getId(),oS.get().getPoints(),oS.get().getMotivation(),oS.get().getAssignDate(),oS.get().getStudent(),oS.get().getTeacher());
-            scoreRepositoryJpa.save(score);
+            Score oldScore = oS.get(); // Prendi l'entità esistente
+            // Aggiorna solo i campi necessari
+            oldScore.setPoints(score.getPoints());
+            oldScore.setMotivation(score.getMotivation());
+            oldScore.setAssignDate(score.getAssignDate());
+            // Aggiungi altre proprietà che devono essere aggiornate
+
+            // Salva l'entità aggiornata
+            scoreRepositoryJpa.save(oldScore);
+
+            return Optional.of(oldScore);
         }
-        return Optional.ofNullable(oldScore);
+        return Optional.empty(); // Se non trovato, restituisci Optional.empty
+    }
+
+    @Override
+    public List<Score> findStudentScores(long id, LocalDate startDate,LocalDate endDate) throws EntityNotFoundException {
+        Optional<Student> optStudent = studentRepositoryJpa.findById(id);
+        if(optStudent.isEmpty()){
+            throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
+        }
+        return scoreRepositoryJpa.getAllScoresByStudentIdAndDateRange(id,startDate,endDate);
     }
 
 }
