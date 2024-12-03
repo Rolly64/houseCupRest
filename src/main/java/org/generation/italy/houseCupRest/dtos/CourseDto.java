@@ -2,6 +2,7 @@ package org.generation.italy.houseCupRest.dtos;
 
 import org.generation.italy.houseCupRest.model.entities.Course;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class CourseDto {
@@ -21,7 +22,14 @@ public class CourseDto {
         this.startDate = c.getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE);
         this.endDate = c.getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
-
+    public Course toCourse (){
+        var c = new Course();
+        c.setId(id);
+        c.setClassName(className);
+        c.setStartDate(LocalDate.parse(startDate));
+        c.setEndDate(LocalDate.parse(endDate));
+        return c;
+    }
     public long getId() {
         return id;
     }
