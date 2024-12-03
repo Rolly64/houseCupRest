@@ -75,4 +75,10 @@ public class ScoreController {
          List<ScoreDto> pointsDto = points.stream().map(ScoreDto::new).toList();
          return ResponseEntity.ok(pointsDto);
     }
+    @GetMapping("student/{id}/points/weekly")
+    public ResponseEntity<List<ScoreDto>> findStudentWeekScores(@PathVariable long id) {
+        List<Score> points = sService.findStudentWeekScores(id);
+        List<ScoreDto> pointsDto = points.stream().map(ScoreDto::new).toList();
+        return ResponseEntity.ok(pointsDto);
+    }
 }

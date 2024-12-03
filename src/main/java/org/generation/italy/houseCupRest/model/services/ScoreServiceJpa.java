@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -86,10 +87,11 @@ public class ScoreServiceJpa implements ScoreService{
     }
 
     @Override
-    public List<Score> findCurrentWeekScore() {
-        return scoreRepositoryJpa.findCurrentWeekScore(LocalDate.now(), LocalDate.){
-            return List.of();
-        }
+    public List<Score> findStudentWeekScores(long studentId) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+        return scoreRepositoryJpa.findCurrentWeekScore(startOfWeek, endOfWeek, studentId);
     }
 
 
