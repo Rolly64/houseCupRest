@@ -134,4 +134,8 @@ public class Teacher {
     public void setScoreList(List<Score> scoreList) {
         this.scoreList = scoreList;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

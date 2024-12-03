@@ -29,4 +29,19 @@ public class ScoreServiceJpa implements ScoreService{
     public Optional<Score> findById(long id) {
         return scoreRepositoryJpa.findById(id);
     }
+
+    @Override
+    public Optional<Score> updateScore(Score score) {
+        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
+        if(oS.isPresent()){
+            return Optional.of(scoreRepositoryJpa.save(score));
+        }
+        return Optional.empty();
+    }
+    @Override
+    public Optional<Score> deleteScoreById(long id) {
+        Optional<Score> oS = scoreRepositoryJpa.findById(id);
+        oS.ifPresent(score -> scoreRepositoryJpa.delete(score));
+        return oS;
+    }
 }
