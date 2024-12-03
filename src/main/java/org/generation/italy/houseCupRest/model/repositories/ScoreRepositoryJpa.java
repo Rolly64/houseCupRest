@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     @Query("""
-            SELECT s 
-            FROM Score s 
+            SELECT s
+            FROM Score s
             WHERE s.student.id = :studentId
        """)
     List<Score> findScoresByStudentId(@Param("studentId") Long studentId);
