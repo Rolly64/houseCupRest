@@ -15,6 +15,7 @@ public interface RegisterService{
     Optional<Course> findCourseById(long id);
     Optional<House> findHouseById(long id);
     List<Student> findAllStudents();
+    Optional<Teacher> findTeacherById(long id);
     List<Teacher> findAllTeachers(); // ricordiamo di implementare teacher
     Student saveStudent(Student s);
     Optional<Student> findStudentById(long id);

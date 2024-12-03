@@ -33,47 +33,36 @@ public class CourseDetailDto {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public String getClassName() {
         return className;
     }
-
     public void setClassName(String className) {
         this.className = className;
     }
-
     public String getStartDate() {
         return startDate;
     }
-
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
-
     public String getEndDate() {
         return endDate;
     }
-
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
-
     public List<StudentDto> getStudents() {
         return students;
     }
-
     public void setStudents(List<StudentDto> students) {
         this.students = students;
     }
-
     public List<TeacherDto> getTeachers() {
         return teachers;
     }
-
     public void setTeachers(List<TeacherDto> teachers) {
         this.teachers = teachers;
     }
