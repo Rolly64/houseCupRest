@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
@@ -14,5 +15,12 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
             WHERE s.student.id = :studentId
        """)
     List<Score> findScoresByStudentId(@Param("studentId") Long studentId);
+
+    @Query("""
+       SELECT s
+       FROM Score s
+       WHERE s.date >= :startOfWeek AND s.date <= :endOfWeek
+       """)
+    List<Score> findCurrentWeekScore(@Param("startOfWeek") LocalDate startOfWeek, @Param("endOfWeek")  LocalDate endOfWeek);
 
 }

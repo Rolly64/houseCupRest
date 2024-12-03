@@ -14,4 +14,5 @@ public interface ScoreService {
     Optional<Score> deleteScoreById(long id);
     Score saveScore(Score score, long studentId, long teacherId);
     List<Score> findPointsByStudentId(long studentId);
+    List<Score> findCurrentWeekScore();
 }
