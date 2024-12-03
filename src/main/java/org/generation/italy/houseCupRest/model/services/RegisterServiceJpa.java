@@ -51,7 +51,7 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Teacher> findAllTeachers() { // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
+    public List<Teacher> findAllTeachers() {
         return teacherRepo.findAll();
     }
 
@@ -113,5 +113,20 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public List<Course> findActiveCourses() {
         return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
+    }
+
+    @Override
+    public Optional<Course> findByClassName(String className) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Object createCourse(Course c) {
+        return null;
+    }
+
+    @Override
+    public void deleteCourse(Course course) {
+
     }
 }
