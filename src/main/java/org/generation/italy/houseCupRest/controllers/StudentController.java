@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.controllers;
 
+import org.generation.italy.houseCupRest.dtos.ScoreDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.services.HouseService;
@@ -33,7 +34,8 @@ public class StudentController {
     ResponseEntity<?> getStudentScoresById(@PathVariable long id){
         try{
             List<Score> scores = scoreService.findStudentScores(id);
-
+            List<ScoreDto> dtos = scores.stream().map(ScoreDto::new).toList();
+            return ResponseEntity.ok(dtos);
 
         } catch (EntityNotFoundException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
