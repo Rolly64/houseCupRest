@@ -51,6 +51,11 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
+    public Optional<Teacher> findTeacherById(long id) {
+        return teacherRepo.findById(id);
+    }
+
+    @Override
     public List<Teacher> findAllTeachers() { // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
         return teacherRepo.findAll();
     }
@@ -99,6 +104,7 @@ public class RegisterServiceJpa implements RegisterService{
         Course courseSaved = courseRepo.save(course);
         return courseSaved;
     }
+
 
     @Override
     public List<Course> findActiveCourseByNamesContains(String className) {
