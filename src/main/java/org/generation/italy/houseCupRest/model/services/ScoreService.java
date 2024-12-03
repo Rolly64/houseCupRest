@@ -13,4 +13,5 @@ public interface ScoreService {
     List<Score> getAllScore();
     Optional<Score> updateScore(Score score);
     Optional<Score> deleteScoreById(long id);
+    Score saveScore(Score score, long studentId, long teacherId);
 }
