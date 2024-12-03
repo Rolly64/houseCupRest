@@ -130,8 +130,11 @@ public class Teacher {
     public List<Score> getScoreList() {
         return scoreList;
     }
-
     public void setScoreList(List<Score> scoreList) {
         this.scoreList = scoreList;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
