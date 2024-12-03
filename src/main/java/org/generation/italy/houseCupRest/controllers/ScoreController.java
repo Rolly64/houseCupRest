@@ -1,5 +1,4 @@
 package org.generation.italy.houseCupRest.controllers;
-
 import jakarta.persistence.EntityNotFoundException;
 import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
@@ -69,5 +68,11 @@ public class ScoreController {
         Optional<Score> isDeleted = sService.deleteScoreById(id);
         return isDeleted.map(score -> ResponseEntity.ok(new ScoreDto((score))))
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("student/{id}/points")
+    public ResponseEntity<List<ScoreDto>> findPointsByStudentId(@PathVariable long id){
+         List<Score> points = sService.findPointsByStudentId(id);
+         List<ScoreDto> pointsDto = points.stream().map(ScoreDto::new).toList();
+         return ResponseEntity.ok(pointsDto);
     }
 }
