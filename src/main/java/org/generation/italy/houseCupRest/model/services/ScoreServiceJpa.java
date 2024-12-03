@@ -9,8 +9,11 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,6 +84,14 @@ public class ScoreServiceJpa implements ScoreService{
     @Override
     public List<Score> findPointsByStudentId(long studentId) {
         return scoreRepositoryJpa.findScoresByStudentId(studentId);
+    }
+
+    @Override
+    public List<Score> findStudentWeekScores(long studentId) {
+        LocalDate today = LocalDate.now();
+        LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
+        return scoreRepositoryJpa.findCurrentWeekScore(startOfWeek, endOfWeek, studentId);
     }
 
 
