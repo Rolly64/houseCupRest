@@ -1,8 +1,10 @@
 package org.generation.italy.houseCupRest.controllers;
 
+import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
+import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,17 @@ public class ScoreController {
             return ResponseEntity.created(location).body(ScoreDto.fromScore(score));
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping
+    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto){
+        Score score= scoreDto.toScore();
+        try{
+            scoreService.updateScore(score);
+            return ResponseEntity.ok(scoreDto);
+
+        }catch (IdNotFound e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }

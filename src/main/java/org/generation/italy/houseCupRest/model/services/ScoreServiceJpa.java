@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
@@ -52,4 +53,16 @@ public class ScoreServiceJpa implements ScoreService{
         scoreRepositoryJpa.deleteById(id);
         return scoreRepositoryJpa.findById(id);
     }
+
+    @Override
+    public Optional<Score> updateScore(Score score) {
+        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
+        Score oldScore = null;
+        if(oS.isPresent()){
+            oldScore = new Score(oS.get().getId(),oS.get().getPoints(),oS.get().getMotivation(),oS.get().getAssignDate(),oS.get().getStudent(),oS.get().getTeacher());
+            scoreRepositoryJpa.save(score);
+        }
+        return Optional.ofNullable(oldScore);
+    }
+
 }
