@@ -6,11 +6,10 @@ public class EntityNotFoundException extends Exception {
         super(message);
         this.entityName = entityName;
     }
-
     public String getEntityName() {
-    return entityName;
-  }
-    public String getFullMessage(){
-        return String.format("%s %s", getMessage(), entityName);
+      return entityName;
+    }
+    public String getFullMessage() {
+      return String.format("%s %s", getMessage(), entityName);
     }
 }
