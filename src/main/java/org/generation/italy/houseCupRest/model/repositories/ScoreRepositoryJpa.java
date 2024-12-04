@@ -23,12 +23,12 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
             FROM Score s
             WHERE s.student.house.id = :houseId
             AND s.points = (
-                SELECT MAX(s2.points)
+                SELECT MAX(SUM(s2.points))
                 FROM Score s2
                 WHERE s2.student.house.id = :houseId
             )
            """)
-    List<Student> findTopScoringStudentsByHouse(
+    List<Student> findTopScoreStudentsByHouse(
             @Param("houseId") long houseId
     );
     @Query("""
@@ -39,12 +39,55 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
                 SELECT MAX(s2.points)
                 FROM Score s2
                 WHERE s2.student.house.id = :houseId
+                AND s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
             )
+            AND s.assignDate BETWEEN :startOfWeek AND :endOfWeek
            """)
     List<Student> findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(
+            @Param("houseId") long houseId,
+            @Param("startOfWeek") LocalDate startOfWeek,
+            @Param("endOfWeek") LocalDate endOfWeek
+    );
+    @Query("""
+            SELECT s.student, SUM(s.points)
+             FROM Score s
+             JOIN s.student.house h
+             WHERE h.id = :houseId
+             GROUP BY s.student
+             HAVING SUM(s.points) = (
+                 SELECT MAX(SUM(s2.points))
+                 FROM Score s2
+                 JOIN s2.student.house h2
+                 WHERE h2.id = :houseId
+                 GROUP BY s2.student
+             )
+           """)
+    List<Student> findTopScoringStudentsByHouse(
             @Param("houseId") long houseId
+    );
+    @Query("""
+            SELECT s.student, SUM(s.points)
+             FROM Score s
+             JOIN s.student.house h
+             WHERE h.id = :houseId
+             AND s.assignDate BETWEEN :startOfWeek AND :endOfWeek
+             GROUP BY s.student
+             HAVING SUM(s.points) = (
+                 SELECT MAX(SUM(s2.points))
+                 FROM Score s2
+                 JOIN s2.student.house h2
+                 WHERE h2.id = :houseId
+                 AND s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
+                 GROUP BY s2.student
+             )
+           """)
+    List<Student> findTopScoreStudentsByHouseAndAssignDateAfterAndAssignDateBefore(
+            @Param("houseId") long houseId,
+            @Param("startOfWeek") LocalDate startOfWeek,
+            @Param("endOfWeek") LocalDate endOfWeek
     );
 
 }
+
 
 

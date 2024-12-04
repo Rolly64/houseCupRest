@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
@@ -9,7 +8,6 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -96,9 +94,24 @@ public class ScoreServiceJpa implements ScoreService{
     }
 
     @Override
-    public List<Student> findTopScorerByHouse(long id) {
-        return scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+    public List<Student> findTopScoreStudentByHouse(long id, LocalDate startDate, LocalDate endDate) {
+        List<Student> topStudents = null;
+        if(startDate == null && endDate == null){
+            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouse(id);
+        }else{
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }
+        return  topStudents;
     }
 
-
+    @Override
+    public List<Student> findTopScorerByHouse(long id, LocalDate startDate, LocalDate endDate) {
+        List<Student> topStudents = null;
+        if(startDate == null && endDate == null){
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+        }else{
+            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }
+        return  topStudents;
+    }
 }

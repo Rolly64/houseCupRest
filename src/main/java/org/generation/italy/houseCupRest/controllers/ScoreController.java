@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.controllers;
 
-import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
 import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
@@ -90,9 +89,18 @@ public class ScoreController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("{id}/houses/students/scores")
-    public ResponseEntity<List<StudentDto>> getTopScorers(@PathVariable long id){
-        List<Student> topScorers = scoreService.findTopScorerByHouse(id);
+    @GetMapping("{id}/houses/students/topSingleScore")
+    public ResponseEntity<List<StudentDto>> getTopScorersByASingleScoreAssigned(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
+        List<Student> topScorers = scoreService.findTopScoreStudentByHouse(id,startDate,endDate);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
+    }
+    @GetMapping("{id}/houses/students/score")
+    public ResponseEntity<List<StudentDto>> getTopStudents(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
+        List<Student> topScorers = scoreService.findTopScorerByHouse(id,startDate,endDate);
         if(topScorers.isEmpty()){
             return ResponseEntity.notFound().build();
         }
