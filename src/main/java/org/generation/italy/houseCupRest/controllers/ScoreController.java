@@ -1,8 +1,9 @@
 package org.generation.italy.houseCupRest.controllers;
 import jakarta.persistence.EntityNotFoundException;
-import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
-import org.generation.italy.houseCupRest.model.entities.Course;
+import org.generation.italy.houseCupRest.dtos.StudentDto;
+import org.generation.italy.houseCupRest.dtos.StudentMvpDto;
+import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
@@ -81,5 +82,11 @@ public class ScoreController {
         List<Score> points = sService.findStudentWeekScores(id);
         List<ScoreDto> pointsDto = points.stream().map(ScoreDto::new).toList();
         return ResponseEntity.ok(pointsDto);
+    }
+    @GetMapping("house/{id}/mvp")
+    public ResponseEntity<List<StudentMvpDto>> findHouseMVP(@PathVariable long id){
+        List<StudentMvp> mvp = sService.findMvpByHouseId(id);
+        List<StudentMvpDto> mvpDto = mvp.stream().map(StudentMvpDto::new).toList();
+        return ResponseEntity.ok(mvpDto);
     }
 }
