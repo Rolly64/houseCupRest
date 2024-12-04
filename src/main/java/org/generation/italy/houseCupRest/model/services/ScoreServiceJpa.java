@@ -10,6 +10,7 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,15 +35,14 @@ public class ScoreServiceJpa implements ScoreService{
         Optional<Student> oSt = studentRepositoryJpa.findById(studentId);
         Optional<Teacher> oT = teacherRepositoryJpa.findById(teacherId);
         if(oSt.isEmpty() || oT.isEmpty()){
-            throw new EntityNotFoundException("entità non trovata", oSt.isEmpty() ?
-                    Student.class.getSimpleName() : Teacher.class.getSimpleName());
+            throw new EntityNotFoundException("entità non trovata",
+                    oSt.isEmpty() ? Student.class.getSimpleName() : Teacher.class.getSimpleName());
         }
         score.setStudent(oSt.get());
         score.setTeacher(oT.get());
         scoreRepositoryJpa.save(score);
         return score;
     }
-
     @Override
     public Optional<Score> findById(long id) {
         return scoreRepositoryJpa.findById(id);
@@ -51,5 +51,21 @@ public class ScoreServiceJpa implements ScoreService{
     public Optional<Score> deleteById(long id){
         scoreRepositoryJpa.deleteById(id);
         return scoreRepositoryJpa.findById(id);
+    }
+    @Override
+    public Optional<Score> update(Score s) {
+        Optional<Score> oS = scoreRepositoryJpa.findById(s.getId());
+        Score score = null;
+        if(oS.isPresent()){
+            score = new Score(oS.get().getId(), oS.get().getPoints(), oS.get().getMotivation(),
+                    oS.get().getAssignDate(), oS.get().getStudent(), oS.get().getTeacher());
+            scoreRepositoryJpa.save(s);
+        }
+        return Optional.ofNullable(score);
+    }
+
+    @Override
+    public List<Score> scoreHistoryByStudentId(long id) {
+        return scoreRepositoryJpa.scoreHistoryByStudentId(id).stream().toList();
     }
 }

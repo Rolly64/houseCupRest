@@ -77,9 +77,9 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public Optional <Course> deleteCourseById(long id) {
 //        if(courseRepo.findById(id).isPresent()){
-//            Optional <Course> courseFidedById = courseRepo.findById(id);
+//            Optional <Course> courseFoundById = courseRepo.findById(id);
 //            courseRepo.deleteById(id);
-//            return courseFidedById;
+//            return courseFoundById;
 //        }
 //        return Optional.empty();
             Optional<Course> oC = courseRepo.findById(id);
@@ -104,7 +104,6 @@ public class RegisterServiceJpa implements RegisterService{
         Course courseSaved = courseRepo.save(course);
         return courseSaved;
     }
-
 
     @Override
     public List<Course> findActiveCourseByNamesContains(String className) {

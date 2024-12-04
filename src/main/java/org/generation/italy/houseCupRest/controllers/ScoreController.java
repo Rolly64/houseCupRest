@@ -1,6 +1,8 @@
 package org.generation.italy.houseCupRest.controllers;
 
+import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
+import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
@@ -8,10 +10,7 @@ import org.generation.italy.houseCupRest.model.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -55,5 +54,31 @@ public class ScoreController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody ScoreDto scoreDto, @PathVariable long id) {
+        Score score = scoreDto.toScore();
+        score.setId(id);
+        Optional<Score> updated = scoreService.update(score);
+        if(updated.isPresent()){
+            return ResponseEntity.ok(score);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable long id){
+        Optional<Score> oC = scoreService.deleteById(id);
+        if(oC.isPresent()){
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> scoreHistoryByStudentId(@PathVariable long id){
+
+        return ResponseEntity.notFound().build();
     }
 }

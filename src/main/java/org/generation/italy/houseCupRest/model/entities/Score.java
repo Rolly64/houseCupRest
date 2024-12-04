@@ -32,6 +32,12 @@ public class Score {
         this.student = student;
         this.teacher = teacher;
     }
+//    public Score(long id, int points, String motivation, LocalDate assign_date) {
+//        this.id = id;
+//        this.points = points;
+//        this.motivation = motivation;
+//        this.assignDate = assign_date;
+//    }
 
     public long getId() {
         return id;

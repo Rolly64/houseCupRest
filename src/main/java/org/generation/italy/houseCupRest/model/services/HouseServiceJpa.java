@@ -19,7 +19,7 @@ public class HouseServiceJpa implements HouseService {
     public List<HouseRanking> getRankings() {
         List<House> allHouses = houseRepo.findAll();
         List<HouseRanking> rankings = new ArrayList<>();
-        for(House house : allHouses ){
+        for(House house : allHouses){
             Integer houseScore = houseRepo.getTotalScoreByHouseId(house.getId());
             HouseRanking ranking = new HouseRanking(house, houseScore!=null?houseScore:0);
             rankings.add(ranking);

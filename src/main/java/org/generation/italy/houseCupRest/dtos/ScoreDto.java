@@ -1,8 +1,6 @@
 package org.generation.italy.houseCupRest.dtos;
 
 import org.generation.italy.houseCupRest.model.entities.Score;
-import org.generation.italy.houseCupRest.model.entities.Student;
-import org.generation.italy.houseCupRest.model.entities.Teacher;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
