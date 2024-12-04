@@ -8,6 +8,7 @@ import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -48,7 +49,7 @@ public class ScoreController {
             URI location = uriBuilder.path("score/{id}").buildAndExpand(score.getId()).toUri();
             return ResponseEntity.created(location).body(new ScoreDto(score));
         }catch (EntityNotFoundException e){
-            throw new RuntimeException(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
     @PutMapping("/{id}")
