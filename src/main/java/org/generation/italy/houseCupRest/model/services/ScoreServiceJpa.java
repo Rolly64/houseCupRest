@@ -94,5 +94,8 @@ public class ScoreServiceJpa implements ScoreService{
         return scoreRepositoryJpa.findCurrentWeekScore(startOfWeek, endOfWeek, studentId);
     }
 
-
+    @Override
+    public List<Student> findMvpByHouseId(long houseId) {
+        return scoreRepositoryJpa.findMvpByHouseId(houseId);
+    }
 }
