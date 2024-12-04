@@ -13,6 +13,7 @@ public class Score {
     private long id;
     private int points;
     private String motivation;
+    @Column(name="assign_date")
     private LocalDate assignDate;
     @ManyToOne
     @JoinColumn(name = "stud_id")
@@ -24,7 +25,6 @@ public class Score {
     public Score(){
 
     }
-
     public Score(long id, int points, String motivation, LocalDate assignDate, Student student, Teacher teacher) {
         this.id = id;
         this.points = points;
@@ -33,8 +33,6 @@ public class Score {
         this.student = student;
         this.teacher = teacher;
     }
-
-
     public long getId() {
         return id;
     }
@@ -82,5 +80,4 @@ public class Score {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
-
 }

@@ -4,13 +4,16 @@ import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.exceptions.IdDoesNotExistException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ScoreService {
     Score addScore(Score score);
     Score save(Score score);
     Optional<Score> findById(long id);
-    public Score saveScore(Score score, long studentId, long TeacherId) throws EntityNotFoundException;
-    public Score updateScore(Score s) throws IdDoesNotExistException;
-    public Score deleteScore(Score s) throws IdDoesNotExistException;
+    Score saveScore(Score score, long studentId, long teacherId) throws EntityNotFoundException;
+    Score updateScore(Score score) throws IdDoesNotExistException;
+    void deleteScore(long id) throws IdDoesNotExistException;
+    List<Score> findStudentScores(long id) throws EntityNotFoundException;
+    List<Score> findStudentWeeklyScores(long id) throws EntityNotFoundException;
 }
