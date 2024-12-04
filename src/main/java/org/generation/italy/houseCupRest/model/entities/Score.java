@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -67,6 +68,7 @@ public class Score {
         this.assign_date = assign_date;
     }
 
+    @JsonIgnore
     public Student getStudent() {
         return student;
     }
@@ -75,6 +77,7 @@ public class Score {
         this.student = student;
     }
 
+    @JsonIgnore
     public Teacher getTeacher() {
         return teacher;
     }

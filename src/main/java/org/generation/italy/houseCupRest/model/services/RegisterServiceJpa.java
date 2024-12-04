@@ -1,13 +1,7 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
-import org.generation.italy.houseCupRest.model.entities.House;
-import org.generation.italy.houseCupRest.model.entities.Student;
-import org.generation.italy.houseCupRest.model.entities.Teacher;
-import org.generation.italy.houseCupRest.model.repositories.CourseRepositoryJpa;
-import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
-import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
-import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
+import org.generation.italy.houseCupRest.model.entities.*;
+import org.generation.italy.houseCupRest.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,53 +15,33 @@ public class RegisterServiceJpa implements RegisterService{
     private HouseRepositoryJpa houseRepo;
     private StudentRepositoryJpa studentRepo;
     private TeacherRepositoryJpa teacherRepo;
+    private ScoreRepositoryJpa scoreRepo;
 
     @Autowired
-    public RegisterServiceJpa(CourseRepositoryJpa courseRepo, HouseRepositoryJpa houseRepo, StudentRepositoryJpa studentRepo, TeacherRepositoryJpa teacherRepo){
+    public RegisterServiceJpa(CourseRepositoryJpa courseRepo, HouseRepositoryJpa houseRepo, StudentRepositoryJpa studentRepo, TeacherRepositoryJpa teacherRepo, ScoreRepositoryJpa scoreRepo){
         this.courseRepo = courseRepo;
         this.houseRepo = houseRepo;
         this.studentRepo = studentRepo;
         this.teacherRepo = teacherRepo;
+        this.scoreRepo = scoreRepo;
     }
-
-    @Override
-    public List<Course> findAllCourses() {
-        return courseRepo.findAll();
-    }
-
+    //Houses
     @Override
     public List<House> getAllHouses() {
         return houseRepo.findAll();
     }
-
-    @Override
-    public Optional<Course> findCourseById(long id) {
-        return courseRepo.findById(id);
-    }
-
     @Override
     public Optional<House> findHouseById(long id) {
         return houseRepo.findById(id);
     }
-
+    //Courses
     @Override
-    public List<Teacher> findAllTeachers() { // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
-        return teacherRepo.findAll();
+    public List<Course> findAllCourses() {
+        return courseRepo.findAll();
     }
-
     @Override
-    public List<Student> findAllStudents() {
-        return studentRepo.findAll();
-    }
-
-    @Override
-    public Student saveStudent(Student s) {
-        return studentRepo.save(s);
-    }
-
-    @Override
-    public Optional<Student> findStudentById(long id) {
-        return studentRepo.findById(id);
+    public Optional<Course> findCourseById(long id) {
+        return courseRepo.findById(id);
     }
     @Override
     public Optional <Course> deleteCourseById(long id) {
@@ -77,12 +51,10 @@ public class RegisterServiceJpa implements RegisterService{
 //            return courseFidedById;
 //        }
 //        return Optional.empty();
-            Optional<Course> oC = courseRepo.findById(id);
-            oC.ifPresent(course -> courseRepo.delete(course));
-            return oC;
+        Optional<Course> oC = courseRepo.findById(id);
+        oC.ifPresent(course -> courseRepo.delete(course));
+        return oC;
     }
-
-
     @Override
     public Optional<Course> updateCourse(Course course) {
         Optional<Course> oC = courseRepo.findById(course.getId());
@@ -93,25 +65,51 @@ public class RegisterServiceJpa implements RegisterService{
         }
         return Optional.ofNullable(oldCourse);
     }
-
     @Override
     public Course create(Course course) {
         Course courseSaved = courseRepo.save(course);
         return courseSaved;
     }
-
     @Override
     public List<Course> findActiveCourseByNamesContains(String className) {
         return courseRepo.findByStartDateBeforeAndEndDateAfterAndClassNameContains(LocalDate.now(),LocalDate.now(), className);
     }
-
     @Override
     public List<Course> findByClassNameContains(String className) {
         return courseRepo.findByClassNameContains(className);
     }
-
     @Override
     public List<Course> findActiveCourses() {
         return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
+    }
+    //Teachers
+    @Override
+    public List<Teacher> findAllTeachers() { // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaah
+        return teacherRepo.findAll();
+    }
+    @Override
+    public Optional<Teacher> findTeacherById(long teacherId) {
+        return teacherRepo.findById(teacherId);
+    }
+    //Students
+    @Override
+    public List<Student> findAllStudents() {
+        return studentRepo.findAll();
+    }
+    @Override
+    public Student saveStudent(Student s) {
+        return studentRepo.save(s);
+    }
+
+
+
+    @Override
+    public List<Score> showScoresByStudentId(Long id) {
+        return scoreRepo.findByStudentId(id);
+    }
+
+    @Override
+    public Optional<Student> findStudentById(long id) {
+        return studentRepo.findById(id);
     }
 }
