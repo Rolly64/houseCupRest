@@ -9,8 +9,11 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,14 +53,12 @@ public class ScoreServiceJpa implements ScoreService{
     }
     @Override
     public Optional<Score> deleteById(long id){
-        Optional<Score> scoreToDelete = scoreRepositoryJpa.findById(id); // Cerca l'entità nel database
-        scoreToDelete.ifPresent(score -> scoreRepositoryJpa.deleteById(id)); // Se l'entità esiste, la elimina
-        return scoreToDelete; // Restituisce l'entità eliminata o Optional vuoto se non esisteva
+        scoreRepositoryJpa.deleteById(id);
+        return scoreRepositoryJpa.findById(id);
     }
+
     @Override
     public Optional<Score> updateScore(Score score) {
-
-        //Cerca un oggetto Score nel repository tramite il suo ID, restituendo un Optional per gestire il caso in cui l'ID non esista
         Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
         if(oS.isPresent()){
             Score oldScore = oS.get(); // Prendi l'entità esistente
@@ -74,4 +75,30 @@ public class ScoreServiceJpa implements ScoreService{
         }
         return Optional.empty(); // Se non trovato, restituisci Optional.empty
     }
+
+    @Override
+    public List<Score> findStudentScores(long id, LocalDate startDate,LocalDate endDate) throws EntityNotFoundException {
+        Optional<Student> optStudent = studentRepositoryJpa.findById(id);
+        List<Score> scores = null;
+        if(optStudent.isEmpty()){
+            throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
+        }
+        if(startDate != null && endDate != null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else if(startDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfter(id,startDate);
+        }else if(endDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else{
+             scores = scoreRepositoryJpa.findByStudentId(id);
+        }
+        return scores;
+    }
+
+    @Override
+    public List<Student> findTopScorerByHouse(long id) {
+        return scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+    }
+
+
 }

@@ -2,7 +2,9 @@ package org.generation.italy.houseCupRest.controllers;
 
 import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
+import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
+import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
@@ -12,7 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -44,35 +49,54 @@ public class ScoreController {
 //        return ResponseEntity.created(location).body(ScoreDto.fromScore(score));
 //    }
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ScoreDto dto, UriComponentsBuilder uriBuilder){ // il ? indica che non sai di che tipo sarà la response entity(esempio dto o stringa)
-        Score score = dto.toScore(); //Converte il DTO in un oggetto Score, per prepararlo alla logica del servizio
+    public ResponseEntity<?> create(@RequestBody ScoreDto dto, UriComponentsBuilder uriBuilder){
+        Score score = dto.toScore();
         try {
-            scoreService.saveScore(score, dto.studentId(), dto.teacherId()); //Salva il punteggio e associa lo studente e l'insegnante
-            URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri(); //Costruisce l'URI del nuovo oggetto creato
-            return ResponseEntity.created(location).body(ScoreDto.fromScore(score)); //Restituisce una risposta HTTP 201 con il corpo del nuovo oggetto creato
+            scoreService.saveScore(score, dto.studentId(), dto.teacherId());
+            URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri();
+            return ResponseEntity.created(location).body(ScoreDto.fromScore(score));
         } catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND); //Restituisce una risposta HTTP 404 se uno degli ID non esiste
+            return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping
-    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto){
-        Score score= scoreDto.toScore(); //Aggiorna il punteggio con i nuovi valori
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto,@RequestParam long id){
+        if(id!=scoreDto.id()){
+            return ResponseEntity.badRequest().body("id non trovato");
+        }
+        Score score= scoreDto.toScore();
         try{
             scoreService.updateScore(score);
-            return ResponseEntity.ok(scoreDto); //Restituisce una risposta HTTP 200 con il DTO aggiornato
+            return ResponseEntity.ok(scoreDto);
+
         }catch (IdNotFound e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST); //Restituisce una risposta HTTP 400 se l'ID non è valido
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
     @DeleteMapping("{id}")
-    public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id, UriComponentsBuilder uriBuilder) {
-        Optional<Score> isDeleted = scoreService.deleteById(id); //Prova a eliminare il punteggio con l'ID fornito
-        URI location = uriBuilder.path("/score/{id}").buildAndExpand(id).toUri(); //Costruisce l'URI per confermare l'eliminazione
-        return isDeleted.map(score ->  ResponseEntity.ok(ScoreDto.fromScore(score))).orElseGet(() -> ResponseEntity.notFound().build());
-        // Questo codice restituisce una ResponseEntity in base alla presenza o meno di un oggetto "score" all'interno dell'Optional "isDeleted".
-        // - Se "isDeleted" contiene un valore (un oggetto score), viene mappato in un'istanza di ScoreDto utilizzando il metodo statico "fromScore(score)",
-        //   e il risultato è incapsulato in una ResponseEntity con stato HTTP 200 (OK).
-        // - Se "isDeleted" è vuoto, viene restituita una ResponseEntity con stato HTTP 404 (Not Found).
-        // Il metodo "map" viene utilizzato per trasformare il valore presente nell'Optional, mentre "orElseGet" gestisce il caso in cui l'Optional sia vuoto.
+    public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id) {
+        Optional<Score> isDeleted = scoreService.deleteById(id);
+        return isDeleted.map(score ->
+                ResponseEntity.ok(ScoreDto.fromScore(score))
+        ).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    @GetMapping("{id}/score")
+    public ResponseEntity<?> getScores(@PathVariable long id, @RequestParam(required = false)LocalDate startDate,@RequestParam(required = false) LocalDate endDate) {
+        try {
+            List<Score> scores = scoreService.findStudentScores(id, startDate, endDate);
+            List<ScoreDto> scoresDto = scores.stream().map(ScoreDto::fromScore).toList();
+            return ResponseEntity.ok(scoresDto);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("{id}/houses/students/scores")
+    public ResponseEntity<List<StudentDto>> getTopScorers(@PathVariable long id){
+        List<Student> topScorers = scoreService.findTopScorerByHouse(id);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
     }
 }
