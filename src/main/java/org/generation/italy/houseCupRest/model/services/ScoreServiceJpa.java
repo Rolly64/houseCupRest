@@ -11,6 +11,8 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,5 +78,14 @@ public class ScoreServiceJpa implements ScoreService{
             throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
         }
         return scoreRepoJpa.findByStudentId(id);
+    }
+
+    @Override
+    public List<Score> findStudentWeeklyScores(long id) throws EntityNotFoundException {
+        Optional<Student> optStudent = studentRepoJpa.findById(id);
+        if(optStudent.isEmpty()){
+            throw new EntityNotFoundException("Student not found", optStudent.getClass().getSimpleName());
+        }
+        return scoreRepoJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus((Period.ofDays(7))), LocalDate.now());
     }
 }

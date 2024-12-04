@@ -4,6 +4,7 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.exceptions.IdDoesNotExistException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,11 @@ public interface RegisterService{
     List<Course> findActiveCourseByNamesContains(String className);
     List<Course> findByClassNameContains(String className);
     List<Course> findActiveCourses();
-
     Optional<Teacher> findTeacherById(long teacherId);
+    List<Student> findBestStudentByHouseId(long id) throws IdDoesNotExistException;
+    List<Student> findBestStudentByHouseIdAndClassId(long houseId, long classId) throws IdDoesNotExistException;
+    List<Student> findStudentByScoreReasonContainsWord(String reason);
+    List<Student> findStudentWithBestSingleScoreByHouseId(long id) throws IdDoesNotExistException;
+    List<Student> findStudentWithBestSingleScoreByHouseIdAndClassId(long houseId, long classId) throws IdDoesNotExistException;
+
 }
