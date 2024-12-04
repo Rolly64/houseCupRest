@@ -18,4 +18,7 @@ public interface ScoreService {
     List<Score> findPointsByStudentId(long studentId);
     List<Score> findStudentWeekScores(long studentId);
     List<StudentMvp> findMvpByHouseId(long houseId);
+    List<Student> findStudentByKeyWord(String keyWord);
+    List<Student> findHighestSingleScorerBySingleScore();
+    List<Student> findTheBestStudentsByClassAndHouseId(Long houseId, Long courseId);
 }

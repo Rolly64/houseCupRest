@@ -32,7 +32,35 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
             JOIN s.student AS st
             WHERE st.house.id = :houseId
             GROUP BY s.student.id, s.student.firstname, s.student.surname
-            ORDER BY SUM(s.points) DESC LIMIT 1
+            ORDER BY SUM(s.points) DESC
             """)
     List<StudentMvp> findMvpByHouseId(@Param("houseId") Long houseId);
+    @Query("""
+        SELECT s.student
+        FROM Score AS s
+        JOIN s.student AS st
+        WHERE s.motivation LIKE %:keyWord%
+        """)
+    List<Student> findStudentByKeyWord(@Param("keyWord") String keyWord);
+    @Query("""
+        SELECT s.student
+        FROM Score s
+        WHERE s.points = (SELECT MAX(s2.points) FROM Score s2)
+        """)
+    List<Student> findHighestSingleScorerBySingleScore();
+    @Query("""
+     SELECT s.student
+     FROM Score s
+     JOIN s.student AS st
+     WHERE st.house.id = :houseId
+       AND (:courseId IS NULL OR st.course.id = :courseId)
+       AND s.points = (SELECT MAX(s2.points)
+                       FROM Score s2
+                       WHERE s2.student.house.id = :houseId
+                         AND (:courseId IS NULL OR s2.student.course.id = :courseId))
+     """)
+    List<Student> findTheBestStudentsByClassAndHouseId(@Param("houseId") Long houseId, @Param("courseId") Long courseId);
+
+
+
 }

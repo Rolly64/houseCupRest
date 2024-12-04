@@ -66,10 +66,10 @@ public class ScoreController {
         return ResponseEntity.notFound().build();
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<ScoreDto> deleteById(@PathVariable long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable long id) {
         Optional<Score> isDeleted = sService.deleteScoreById(id);
-        return isDeleted.map(score -> ResponseEntity.ok(new ScoreDto((score))))
-                .orElse(ResponseEntity.notFound().build());
+        return isDeleted.map(score -> new ResponseEntity<Void>((Void) null, HttpStatus.NO_CONTENT))
+                .orElseGet(()-> new ResponseEntity<Void>((Void) null, HttpStatus.NOT_FOUND));
     }
     @GetMapping("student/{id}/points")
     public ResponseEntity<List<ScoreDto>> findPointsByStudentId(@PathVariable long id){
@@ -88,5 +88,23 @@ public class ScoreController {
         List<StudentMvp> mvp = sService.findMvpByHouseId(id);
         List<StudentMvpDto> mvpDto = mvp.stream().map(StudentMvpDto::new).toList();
         return ResponseEntity.ok(mvpDto);
+    }
+    @GetMapping("search/{keyWord}")
+    public ResponseEntity<List<StudentDto>> findStudentByKeyWord(@PathVariable String keyWord){
+        List<Student> students = sService.findStudentByKeyWord(keyWord);
+        List<StudentDto> dto = students.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(dto);
+    }
+    @GetMapping("search/jojo")
+    public ResponseEntity<List<StudentDto>> findStudentByKeyWord() {
+        List<Student> students = sService.findHighestSingleScorerBySingleScore();
+        List<StudentDto> dto = students.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(dto);
+    }
+    @GetMapping("search/jojo/{houseId}/{courseId}")
+    public ResponseEntity<List<StudentDto>> findStudentWeekScores(@PathVariable Long houseId, Long courseId) {
+        List<Student> student = sService.findTheBestStudentsByClassAndHouseId(houseId, courseId);
+        List<StudentDto> dto = student.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(dto);
     }
 }

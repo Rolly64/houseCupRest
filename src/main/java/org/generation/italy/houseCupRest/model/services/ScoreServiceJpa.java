@@ -97,4 +97,21 @@ public class ScoreServiceJpa implements ScoreService{
     public List<StudentMvp> findMvpByHouseId(long houseId) {
         return scoreRepositoryJpa.findMvpByHouseId(houseId);
     }
+
+    @Override
+    public List<Student> findStudentByKeyWord(String keyWord) {
+        return scoreRepositoryJpa.findStudentByKeyWord(keyWord);
+    }
+
+    @Override
+    public List<Student> findHighestSingleScorerBySingleScore() {
+        return scoreRepositoryJpa.findHighestSingleScorerBySingleScore();
+    }
+
+    @Override
+    public List<Student> findTheBestStudentsByClassAndHouseId(Long houseId, Long courseId) {
+        return scoreRepositoryJpa.findTheBestStudentsByClassAndHouseId(houseId, courseId);
+    }
+
+
 }
