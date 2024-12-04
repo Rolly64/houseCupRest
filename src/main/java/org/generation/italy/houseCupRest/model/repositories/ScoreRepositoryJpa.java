@@ -19,8 +19,8 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     @Query("""
        SELECT s
        FROM Score s
-       WHERE s.date >= :startOfWeek AND s.date <= :endOfWeek
+       WHERE s.assign_date BETWEEN :startOfWeek AND :endOfWeek
+         AND s.student.id = :studentId
        """)
-    List<Score> findCurrentWeekScore(@Param("startOfWeek") LocalDate startOfWeek, @Param("endOfWeek")  LocalDate endOfWeek);
-
+    List<Score> findCurrentWeekScore(@Param("startOfWeek") LocalDate startOfWeek, @Param("endOfWeek")  LocalDate endOfWeek, @Param("studentId") Long studentId);
 }
