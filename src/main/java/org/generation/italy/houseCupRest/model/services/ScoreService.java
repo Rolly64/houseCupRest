@@ -3,6 +3,7 @@ package org.generation.italy.houseCupRest.model.services;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
+import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +17,10 @@ public interface ScoreService {
     Optional<Score> deleteById(long id);
     Optional<Score> updateScore(Score score);
     List<Score> findStudentScores(long id,LocalDate startDate,LocalDate endDate) throws EntityNotFoundException;
-    List<Student> findTopScoreStudentByHouse(long id, LocalDate startDate, LocalDate endDate);
-    List<Student> findTopScorerByHouse(long id,LocalDate startDate,LocalDate endDate);
+    List<Student> findTopStudentSingleScoreByHouse(long id) throws IdNotFound;
+    List<Student> findTopStudentSingleScoreByHouseAndByClassId(long houseId,long classId) throws IdNotFound;
+    List<Student>findBestStudentByHouseId(long id, LocalDate starDate,LocalDate endDate) throws IdNotFound;
+    List<Student>findBestStudentByHouseIdAndClassId(long houseId,long classId) throws IdNotFound;
+
+
 }

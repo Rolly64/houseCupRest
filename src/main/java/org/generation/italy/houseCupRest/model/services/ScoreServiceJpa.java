@@ -1,12 +1,9 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Score;
-import org.generation.italy.houseCupRest.model.entities.Student;
-import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.entities.*;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
-import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
-import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
-import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
+import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
+import org.generation.italy.houseCupRest.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +16,16 @@ public class ScoreServiceJpa implements ScoreService{
     private ScoreRepositoryJpa scoreRepositoryJpa;
     private StudentRepositoryJpa studentRepositoryJpa;
     private TeacherRepositoryJpa teacherRepositoryJpa;
+    private HouseRepositoryJpa houseRepositoryJpa;
+    private CourseRepositoryJpa courseRepositoryJpa;
     @Autowired
-    public ScoreServiceJpa(ScoreRepositoryJpa scoreRepositoryJpa, StudentRepositoryJpa studentRepositoryJpa, TeacherRepositoryJpa teacherRepositoryJpa) {
+    public ScoreServiceJpa(ScoreRepositoryJpa scoreRepositoryJpa, StudentRepositoryJpa studentRepositoryJpa, TeacherRepositoryJpa teacherRepositoryJpa,HouseRepositoryJpa houseRepositoryJpa,
+                           CourseRepositoryJpa courseRepositoryJpa) {
         this.scoreRepositoryJpa = scoreRepositoryJpa;
         this.studentRepositoryJpa = studentRepositoryJpa;
         this.teacherRepositoryJpa = teacherRepositoryJpa;
+        this.houseRepositoryJpa = houseRepositoryJpa;
+        this.courseRepositoryJpa = courseRepositoryJpa;
 
     }
 
@@ -82,36 +84,60 @@ public class ScoreServiceJpa implements ScoreService{
             throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
         }
         if(startDate != null && endDate != null){
-             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate); //se ci sono entrambe le date
         }else if(startDate!=null){
-             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfter(id,startDate);
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfter(id,startDate); // da quella data in poi
         }else if(endDate!=null){
-             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate); // prima di quella data fine
         }else{
-             scores = scoreRepositoryJpa.findByStudentId(id);
+             scores = scoreRepositoryJpa.findByStudentId(id); //se non ci sono date
         }
         return scores;
     }
 
     @Override
-    public List<Student> findTopScoreStudentByHouse(long id, LocalDate startDate, LocalDate endDate) {
-        List<Student> topStudents = null;
-        if(startDate == null && endDate == null){
-            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouse(id);
-        }else{
-            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+    public List<Student> findTopStudentSingleScoreByHouse(long id) throws IdNotFound{
+        Optional<House> optHouse = houseRepositoryJpa.findById(id);
+        if(optHouse.isEmpty()){
+            throw new IdNotFound("house not found");
         }
-        return  topStudents;
+        return  scoreRepositoryJpa.findTopStudentSingleScoreByHouse(id);
     }
 
     @Override
-    public List<Student> findTopScorerByHouse(long id, LocalDate startDate, LocalDate endDate) {
-        List<Student> topStudents = null;
-        if(startDate == null && endDate == null){
-            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
-        }else{
-            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+    public List<Student> findBestStudentByHouseId(long id, LocalDate starDate, LocalDate endDate) throws IdNotFound {
+        Optional<House> optHouse = houseRepositoryJpa.findById(id); //controllo se id della casa esiste nel database
+        if(optHouse.isEmpty()){
+            throw new IdNotFound("house not found");
         }
-        return  topStudents;
+        return scoreRepositoryJpa.findBestStudentByHouseId(id,starDate, endDate);
+
+    }
+
+    @Override
+    public List<Student> findBestStudentByHouseIdAndClassId(long houseId, long classId) throws IdNotFound {
+        Optional<House> optHouse= houseRepositoryJpa.findById(houseId);
+        if(optHouse.isEmpty()){
+            throw new IdNotFound("house not found");
+        }
+        Optional<Course> optCourse= courseRepositoryJpa.findById(classId);
+        if(optCourse.isEmpty()){
+            throw new IdNotFound("course not found");
+        }
+        return scoreRepositoryJpa.findBestStudentByHouseIdAndClassId(houseId,classId);
+    }
+
+    @Override
+    public List<Student> findTopStudentSingleScoreByHouseAndByClassId(long houseId, long classId) throws IdNotFound {
+        Optional<House> optHouse= houseRepositoryJpa.findById(houseId);
+        if(optHouse.isEmpty()){
+            throw new IdNotFound("house not found");
+        }
+        Optional<Course> optCourse= courseRepositoryJpa.findById(classId);
+        if(optCourse.isEmpty()){
+            throw new IdNotFound("course not found");
+        }
+        return scoreRepositoryJpa.findTopStudentSingleScoreByHouseAndByClassId(houseId,classId);
     }
 }
+

@@ -47,7 +47,7 @@ public class ScoreController {
 //        URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri();
 //        return ResponseEntity.created(location).body(ScoreDto.fromScore(score));
 //    }
-    @PostMapping
+    @PostMapping //crea un punteggio
     public ResponseEntity<?> create(@RequestBody ScoreDto dto, UriComponentsBuilder uriBuilder){
         Score score = dto.toScore();
         try {
@@ -58,7 +58,7 @@ public class ScoreController {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("{id}")
+    @PutMapping("{id}") //update di un punteggio
     public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto,@RequestParam long id){
         if(id!=scoreDto.id()){
             return ResponseEntity.badRequest().body("id non trovato");
@@ -79,7 +79,7 @@ public class ScoreController {
                 ResponseEntity.ok(ScoreDto.fromScore(score))
         ).orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @GetMapping("{id}/score")
+    @GetMapping("{id}/score") // punteggi di uno studente per una certa settimana
     public ResponseEntity<?> getScores(@PathVariable long id, @RequestParam(required = false)LocalDate startDate,@RequestParam(required = false) LocalDate endDate) {
         try {
             List<Score> scores = scoreService.findStudentScores(id, startDate, endDate);
@@ -89,22 +89,43 @@ public class ScoreController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("{id}/houses/students/topSingleScore")
-    public ResponseEntity<List<StudentDto>> getTopScorersByASingleScoreAssigned(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
-        List<Student> topScorers = scoreService.findTopScoreStudentByHouse(id,startDate,endDate);
+    @GetMapping("/house/{id}/bestSingleScore") //lo studente con il singolo voto più alto all'interno della casata in un
+    public ResponseEntity<List<StudentDto>> getStudentWithBestSingleScoreByHouseId(@PathVariable long id){
+        List<Student> topScorers = scoreService.findTopStudentSingleScoreByHouse(id);
         if(topScorers.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
         return ResponseEntity.ok(studentDtos);
     }
-    @GetMapping("{id}/houses/students/score")
-    public ResponseEntity<List<StudentDto>> getTopStudents(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
-        List<Student> topScorers = scoreService.findTopScorerByHouse(id,startDate,endDate);
+
+    @GetMapping("/class/{classId}/house/{houseId}/bestSingleScore") //lo studente con il singolo punteggio più alto di una casa e di una classe
+    public ResponseEntity<List<StudentDto>> getStudentWithBestSingleScoreByHouseIdAndClassId(@PathVariable long houseId, @PathVariable long classId){
+        List<Student> topScorers = scoreService.findTopStudentSingleScoreByHouseAndByClassId(houseId, classId);
         if(topScorers.isEmpty()){
             return ResponseEntity.notFound().build();
         }
         List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
         return ResponseEntity.ok(studentDtos);
+    }
+    @GetMapping("/house/{id}/bestStudentForDate") //lo studente con la somma massima dei punteggi per una casa e per una certa settimana
+    public ResponseEntity<List<StudentDto>> getBestStudentByHouseId(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
+        List<Student> topScorers = scoreService.findBestStudentByHouseId(id, startDate, endDate);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
+
+    }
+    @GetMapping("/class/{classId}/house/{houseId}/bestStudent") //lo studente con la somma massima dei punteggi per una casa e una classe
+    public ResponseEntity<List<StudentDto>> getBestStudentByHouseIdAndClassId(@PathVariable long houseId,@PathVariable long classId){
+        List<Student> topScorers = scoreService.findBestStudentByHouseIdAndClassId(houseId,classId);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
+
     }
 }

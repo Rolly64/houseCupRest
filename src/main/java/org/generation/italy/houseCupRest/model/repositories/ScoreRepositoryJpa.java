@@ -28,63 +28,61 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
                 WHERE s2.student.house.id = :houseId
             )
            """)
-    List<Student> findTopScoreStudentsByHouse(
+    List<Student> findTopStudentSingleScoreByHouse(
             @Param("houseId") long houseId
     );
+
     @Query("""
             SELECT s.student
             FROM Score s
-            WHERE s.student.house.id = :houseId
+            WHERE s.student.house.id = :houseId AND s.course.id= :classId
             AND s.points = (
-                SELECT MAX(s2.points)
+                SELECT MAX(SUM(s2.points))
                 FROM Score s2
-                WHERE s2.student.house.id = :houseId
-                AND s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
+                WHERE s2.student.house.id = :houseId AND s.course.id= :classId
             )
-            AND s.assignDate BETWEEN :startOfWeek AND :endOfWeek
            """)
-    List<Student> findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(
+    List<Student> findTopStudentSingleScoreByHouseAndByClassId(
+            @Param("houseId") long houseId,
+            @Param("classId") long classId
+    );
+
+
+
+    @Query("""
+            SELECT S
+            FROM Student s
+            JOIN s.scores sc
+            WHERE s.house.id=:house.id
+             AND sc.points=(
+                 SELECT MAX(sc2.points)
+                 FROM Score sc2
+                 WHERE sc2.student.house.id=:house.id
+                 AND
+                 sc2.assignDate BETWEEN :startOfWeek AND :endOfWeek
+             )
+           """)
+    List<Student>findBestStudentByHouseId(
             @Param("houseId") long houseId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
+
     @Query("""
-            SELECT s.student, SUM(s.points)
-             FROM Score s
-             JOIN s.student.house h
-             WHERE h.id = :houseId
-             GROUP BY s.student
-             HAVING SUM(s.points) = (
-                 SELECT MAX(SUM(s2.points))
-                 FROM Score s2
-                 JOIN s2.student.house h2
-                 WHERE h2.id = :houseId
-                 GROUP BY s2.student
+            SELECT S
+            FROM Student s
+            JOIN s.scores sc
+            WHERE s.house.id=:house.id AND s.course.id= :classId
+                  AND sc.points=(
+                 SELECT MAX(sc2.points)
+                 FROM Score sc2
+                 WHERE sc2.student.house.id=:house.id AND s.course.id=:classId
+          
              )
            """)
-    List<Student> findTopScoringStudentsByHouse(
-            @Param("houseId") long houseId
-    );
-    @Query("""
-            SELECT s.student, SUM(s.points)
-             FROM Score s
-             JOIN s.student.house h
-             WHERE h.id = :houseId
-             AND s.assignDate BETWEEN :startOfWeek AND :endOfWeek
-             GROUP BY s.student
-             HAVING SUM(s.points) = (
-                 SELECT MAX(SUM(s2.points))
-                 FROM Score s2
-                 JOIN s2.student.house h2
-                 WHERE h2.id = :houseId
-                 AND s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
-                 GROUP BY s2.student
-             )
-           """)
-    List<Student> findTopScoreStudentsByHouseAndAssignDateAfterAndAssignDateBefore(
+    List<Student>findBestStudentByHouseIdAndClassId(
             @Param("houseId") long houseId,
-            @Param("startOfWeek") LocalDate startOfWeek,
-            @Param("endOfWeek") LocalDate endOfWeek
+            @Param("classId") long classId
     );
 
 }
