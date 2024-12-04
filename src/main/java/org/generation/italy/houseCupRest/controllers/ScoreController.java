@@ -1,8 +1,9 @@
 package org.generation.italy.houseCupRest.controllers;
 
-import org.generation.italy.houseCupRest.dtos.CourseDto;
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
+import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
+import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.exceptions.IdNotFound;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
@@ -57,9 +58,9 @@ public class ScoreController {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto,@PathVariable long id){
-        if(id!=scoreDto.getId()){
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto,@RequestParam long id){
+        if(id!=scoreDto.id()){
             return ResponseEntity.badRequest().body("id non trovato");
         }
         Score score= scoreDto.toScore();
@@ -72,12 +73,12 @@ public class ScoreController {
         }
     }
     @DeleteMapping("{id}")
-        public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id){
-            Optional<Score> isDeleted = scoreService.deleteById(id);
-            return isDeleted.map(score -> ResponseEntity.ok(ScoreDto.fromScore(score))).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id) {
+        Optional<Score> isDeleted = scoreService.deleteById(id);
+        return isDeleted.map(score ->
+                ResponseEntity.ok(ScoreDto.fromScore(score))
+        ).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
     @GetMapping("{id}/score")
     public ResponseEntity<?> getScores(@PathVariable long id, @RequestParam(required = false)LocalDate startDate,@RequestParam(required = false) LocalDate endDate) {
         try {
@@ -87,5 +88,23 @@ public class ScoreController {
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping("{id}/houses/students/topSingleScore")
+    public ResponseEntity<List<StudentDto>> getTopScorersByASingleScoreAssigned(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
+        List<Student> topScorers = scoreService.findTopScoreStudentByHouse(id,startDate,endDate);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
+    }
+    @GetMapping("{id}/houses/students/score")
+    public ResponseEntity<List<StudentDto>> getTopStudents(@PathVariable long id, @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate){
+        List<Student> topScorers = scoreService.findTopScorerByHouse(id,startDate,endDate);
+        if(topScorers.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentDtos = topScorers.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentDtos);
     }
 }

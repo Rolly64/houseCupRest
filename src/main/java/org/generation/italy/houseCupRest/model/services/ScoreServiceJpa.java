@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
@@ -9,7 +8,6 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -59,14 +57,14 @@ public class ScoreServiceJpa implements ScoreService{
 
     @Override
     public Optional<Score> updateScore(Score score) {
-
-        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId()); //trovare un'entità Score nel database utilizzando l'ID fornito
+        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
         if(oS.isPresent()){
             Score oldScore = oS.get(); // Prendi l'entità esistente
             // Aggiorna solo i campi necessari
             oldScore.setPoints(score.getPoints());
             oldScore.setMotivation(score.getMotivation());
             oldScore.setAssignDate(score.getAssignDate());
+            // Aggiungi altre proprietà che devono essere aggiornate
 
             // Salva l'entità aggiornata
             scoreRepositoryJpa.save(oldScore);
@@ -79,12 +77,41 @@ public class ScoreServiceJpa implements ScoreService{
     @Override
     public List<Score> findStudentScores(long id, LocalDate startDate,LocalDate endDate) throws EntityNotFoundException {
         Optional<Student> optStudent = studentRepositoryJpa.findById(id);
+        List<Score> scores = null;
         if(optStudent.isEmpty()){
             throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssigndateBefore(id,startDate,endDate);
+        if(startDate != null && endDate != null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else if(startDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfter(id,startDate);
+        }else if(endDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else{
+             scores = scoreRepositoryJpa.findByStudentId(id);
+        }
+        return scores;
     }
 
+    @Override
+    public List<Student> findTopScoreStudentByHouse(long id, LocalDate startDate, LocalDate endDate) {
+        List<Student> topStudents = null;
+        if(startDate == null && endDate == null){
+            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouse(id);
+        }else{
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }
+        return  topStudents;
+    }
 
-
+    @Override
+    public List<Student> findTopScorerByHouse(long id, LocalDate startDate, LocalDate endDate) {
+        List<Student> topStudents = null;
+        if(startDate == null && endDate == null){
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+        }else{
+            topStudents = scoreRepositoryJpa.findTopScoreStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }
+        return  topStudents;
+    }
 }
