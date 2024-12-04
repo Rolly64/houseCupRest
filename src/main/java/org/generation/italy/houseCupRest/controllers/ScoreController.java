@@ -57,8 +57,11 @@ public class ScoreController {
             return new ResponseEntity<>(e.getFullMessage(), HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping
-    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateScore(@RequestBody ScoreDto scoreDto,@PathVariable long id){
+        if(id!=scoreDto.getId()){
+            return ResponseEntity.badRequest().body("id non trovato");
+        }
         Score score= scoreDto.toScore();
         try{
             scoreService.updateScore(score);
@@ -69,13 +72,12 @@ public class ScoreController {
         }
     }
     @DeleteMapping("{id}")
-        public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id,UriComponentsBuilder uriBuilder){
+        public ResponseEntity<ScoreDto> deleteScore(@PathVariable long id){
             Optional<Score> isDeleted = scoreService.deleteById(id);
-            return isDeleted.map(score -> {
-                URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri();
-                return ResponseEntity.ok(ScoreDto.fromScore(score));
-            }).orElseGet(() -> ResponseEntity.notFound().build());
+            return isDeleted.map(score -> ResponseEntity.ok(ScoreDto.fromScore(score))).orElse(ResponseEntity.notFound().build());
     }
+
+
     @GetMapping("{id}/score")
     public ResponseEntity<?> getScores(@PathVariable long id, @RequestParam(required = false)LocalDate startDate,@RequestParam(required = false) LocalDate endDate) {
         try {

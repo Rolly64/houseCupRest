@@ -23,4 +23,8 @@ public record ScoreDto (long id, int points, String motivation, String assignDat
         s.setAssignDate(LocalDate.parse(this.assignDate));
         return s;
     }
+
+    public long getId() {
+        return id;
+    }
 }

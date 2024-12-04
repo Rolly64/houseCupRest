@@ -59,14 +59,14 @@ public class ScoreServiceJpa implements ScoreService{
 
     @Override
     public Optional<Score> updateScore(Score score) {
-        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
+
+        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId()); //trovare un'entità Score nel database utilizzando l'ID fornito
         if(oS.isPresent()){
             Score oldScore = oS.get(); // Prendi l'entità esistente
             // Aggiorna solo i campi necessari
             oldScore.setPoints(score.getPoints());
             oldScore.setMotivation(score.getMotivation());
             oldScore.setAssignDate(score.getAssignDate());
-            // Aggiungi altre proprietà che devono essere aggiornate
 
             // Salva l'entità aggiornata
             scoreRepositoryJpa.save(oldScore);
@@ -82,7 +82,9 @@ public class ScoreServiceJpa implements ScoreService{
         if(optStudent.isEmpty()){
             throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.getAllScoresByStudentIdAndDateRange(id,startDate,endDate);
+        return scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssigndateBefore(id,startDate,endDate);
     }
+
+
 
 }

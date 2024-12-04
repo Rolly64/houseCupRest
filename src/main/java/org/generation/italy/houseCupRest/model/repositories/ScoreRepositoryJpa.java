@@ -9,17 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
-    @Query("""
-       SELECT s
-       FROM Score s
-       WHERE s.assignDate BETWEEN :startOfWeek AND :endOfWeek
-         AND s.student.id = :studentId
-       """)
-    List<Score> getAllScoresByStudentIdAndDateRange(
-            @Param("studentId") long studentId,
-            @Param("startOfWeek") LocalDate startOfWeek,
-            @Param("endOfWeek") LocalDate endOfWeek
-    );
+    List <Score> findByStudentIdAndAssignDateAfterAndAssigndateBefore(long id, LocalDate d1, LocalDate d2);
 
 
 }
