@@ -50,19 +50,28 @@ public class ScoreServiceJpa implements ScoreService{
     }
     @Override
     public Optional<Score> deleteById(long id){
-        scoreRepositoryJpa.deleteById(id);
-        return scoreRepositoryJpa.findById(id);
+        Optional<Score> scoreToDelete = scoreRepositoryJpa.findById(id); // Cerca l'entità nel database
+        scoreToDelete.ifPresent(score -> scoreRepositoryJpa.deleteById(id)); // Se l'entità esiste, la elimina
+        return scoreToDelete; // Restituisce l'entità eliminata o Optional vuoto se non esisteva
     }
-
     @Override
     public Optional<Score> updateScore(Score score) {
-        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
-        Score oldScore = null;
-        if(oS.isPresent()){
-            oldScore = new Score(oS.get().getId(),oS.get().getPoints(),oS.get().getMotivation(),oS.get().getAssignDate(),oS.get().getStudent(),oS.get().getTeacher());
-            scoreRepositoryJpa.save(score);
-        }
-        return Optional.ofNullable(oldScore);
-    }
 
+        //Cerca un oggetto Score nel repository tramite il suo ID, restituendo un Optional per gestire il caso in cui l'ID non esista
+        Optional<Score> oS = scoreRepositoryJpa.findById(score.getId());
+        if(oS.isPresent()){
+            Score oldScore = oS.get(); // Prendi l'entità esistente
+            // Aggiorna solo i campi necessari
+            oldScore.setPoints(score.getPoints());
+            oldScore.setMotivation(score.getMotivation());
+            oldScore.setAssignDate(score.getAssignDate());
+            // Aggiungi altre proprietà che devono essere aggiornate
+
+            // Salva l'entità aggiornata
+            scoreRepositoryJpa.save(oldScore);
+
+            return Optional.of(oldScore);
+        }
+        return Optional.empty(); // Se non trovato, restituisci Optional.empty
+    }
 }
