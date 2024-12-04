@@ -14,7 +14,6 @@ public class HouseRanking {
     public House getHouse() {
         return house;
     }
-
     public int getTotalScore() {
         return totalScore;
     }

@@ -23,8 +23,6 @@ public class House {
 
     }
 
-
-
     public House(long id, String houseName, String houseImage) {
         this.id = id;
         this.houseName = houseName;

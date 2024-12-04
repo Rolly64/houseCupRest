@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 
@@ -16,5 +17,5 @@ public interface ScoreService {
     Score saveScore(Score score, long studentId, long teacherId);
     List<Score> findPointsByStudentId(long studentId);
     List<Score> findStudentWeekScores(long studentId);
-    List<Student> findMvpByHouseId(long houseId);
+    List<StudentMvp> findMvpByHouseId(long houseId);
 }
