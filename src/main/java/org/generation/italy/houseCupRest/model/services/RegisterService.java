@@ -24,4 +24,5 @@ public interface RegisterService{
     List<Course> findActiveCourseByNamesContains(String className);
     List<Course> findByClassNameContains(String className);
     List<Course> findActiveCourses();
+    Optional<Teacher> findTeacherById(long id);
 }

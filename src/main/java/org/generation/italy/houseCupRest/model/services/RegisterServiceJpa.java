@@ -114,4 +114,9 @@ public class RegisterServiceJpa implements RegisterService{
     public List<Course> findActiveCourses() {
         return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
     }
+
+    @Override
+    public Optional<Teacher> findTeacherById(long id) {
+        return teacherRepo.findById(id);
+    }
 }
