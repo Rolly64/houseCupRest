@@ -17,4 +17,5 @@ public interface ScoreService {
     Optional<Score> deleteById(long id);
     Optional<Score> updateScore(Score score);
     List<Score> findStudentScores(long id,LocalDate startDate,LocalDate endDate) throws EntityNotFoundException;
+    List<Student> findTopScorerByHouse(long id);
 }

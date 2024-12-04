@@ -79,10 +79,26 @@ public class ScoreServiceJpa implements ScoreService{
     @Override
     public List<Score> findStudentScores(long id, LocalDate startDate,LocalDate endDate) throws EntityNotFoundException {
         Optional<Student> optStudent = studentRepositoryJpa.findById(id);
+        List<Score> scores = null;
         if(optStudent.isEmpty()){
             throw new EntityNotFoundException("student not found", optStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.getAllScoresByStudentIdAndDateRange(id,startDate,endDate);
+        if(startDate != null && endDate != null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else if(startDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfter(id,startDate);
+        }else if(endDate!=null){
+             scores = scoreRepositoryJpa.findByStudentIdAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }else{
+             scores = scoreRepositoryJpa.findByStudentId(id);
+        }
+        return scores;
     }
+
+    @Override
+    public List<Student> findTopScorerByHouse(long id) {
+        return scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+    }
+
 
 }
