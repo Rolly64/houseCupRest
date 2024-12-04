@@ -39,10 +39,14 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
                 SELECT MAX(s2.points)
                 FROM Score s2
                 WHERE s2.student.house.id = :houseId
+                AND s2.date BETWEEN :startOfWeek AND :endOfWeek
             )
+            s.date BETWEEN :startWeek AND :endOfWeek
            """)
     List<Student> findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(
             @Param("houseId") long houseId
+            @Param("startOfWeek") LocalDate startOfWeek
+            @Param("endOfWeek") LocalDate endOfWeek
     );
 
 }

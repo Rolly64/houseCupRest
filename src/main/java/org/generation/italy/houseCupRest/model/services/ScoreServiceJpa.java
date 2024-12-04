@@ -96,8 +96,13 @@ public class ScoreServiceJpa implements ScoreService{
     }
 
     @Override
-    public List<Student> findTopScorerByHouse(long id) {
-        return scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+    public List<Student> findTopScorerByHouse(long id, LocalDate startDate, LocalDate endDate) {
+        List<Student> topStudents = null;
+        if (startDate == null && endDate == null) {
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouse(id);
+        }else {
+            topStudents = scoreRepositoryJpa.findTopScoringStudentsByHouseAndAssignDateAfterAndAssignDateBefore(id,startDate,endDate);
+        }
     }
 
 

@@ -91,8 +91,8 @@ public class ScoreController {
         }
     }
     @GetMapping("{id}/houses/students/scores")
-    public ResponseEntity<List<StudentDto>> getTopScorers(@PathVariable long id){
-        List<Student> topScorers = scoreService.findTopScorerByHouse(id);
+    public ResponseEntity<List<StudentDto>> getTopScorers(@PathVariable long id), @RequestParam(required = false)LocalDate startDate, @RequestParam(required = false)LocalDate endDate{
+        List<Student> topScorers = scoreService.findTopScorerByHouse(id, startDate, endDate);
         if(topScorers.isEmpty()){
             return ResponseEntity.notFound().build();
         }
