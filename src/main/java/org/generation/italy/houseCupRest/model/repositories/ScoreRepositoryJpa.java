@@ -35,11 +35,11 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     @Query("""
             SELECT s.student
             FROM Score s
-            WHERE s.student.house.id = :houseId AND s.course.id= :classId
+            WHERE s.student.house.id = :houseId AND s.student.course.id= :classId
             AND s.points = (
                 SELECT MAX(SUM(s2.points))
                 FROM Score s2
-                WHERE s2.student.house.id = :houseId AND s.course.id= :classId
+                WHERE s2.student.house.id = :houseId AND s.student.course.id= :classId
             )
            """)
     List<Student> findTopStudentSingleScoreByHouseAndByClassId(
@@ -50,16 +50,16 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
 
 
     @Query("""
-            SELECT S
-            FROM Student s
-            JOIN s.scores sc
-            WHERE s.house.id=:house.id
-             AND sc.points=(
-                 SELECT MAX(sc2.points)
-                 FROM Score sc2
-                 WHERE sc2.student.house.id=:house.id
+            SELECT s.student
+            FROM Score s
+            JOIN s.student st
+            WHERE st.house.id=:houseId
+             AND s.points=(
+                 SELECT MAX(s2.points)
+                 FROM Score s2
+                 WHERE s2.student.house.id=:houseId
                  AND
-                 sc2.assignDate BETWEEN :startOfWeek AND :endOfWeek
+                 s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
              )
            """)
     List<Student>findBestStudentByHouseId(
@@ -69,14 +69,14 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     );
 
     @Query("""
-            SELECT S
-            FROM Student s
-            JOIN s.scores sc
-            WHERE s.house.id=:house.id AND s.course.id= :classId
-                  AND sc.points=(
-                 SELECT MAX(sc2.points)
-                 FROM Score sc2
-                 WHERE sc2.student.house.id=:house.id AND s.course.id=:classId
+             SELECT s.student
+            FROM Score s
+            JOIN s.student st
+            WHERE st.house.id=:houseId AND st.course.id= :classId
+                  AND s.points=(
+                 SELECT MAX(s2.points)
+                 FROM Score s2
+                 WHERE s2.student.house.id=:houseId AND s.student.course.id=:classId
           
              )
            """)
