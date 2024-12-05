@@ -4,6 +4,8 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.exceptions.IdDoesNotExistException;
+import org.generation.italy.houseCupRest.model.exceptions.ResourceNotFoundException;
 import org.generation.italy.houseCupRest.model.repositories.CourseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
@@ -125,5 +127,56 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public List<Course> findActiveCourses() {
         return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
+    }
+
+    @Override
+    public List<Student> findStudentsWithBestSingleScoreByHouseId(long id) throws IdDoesNotExistException {
+        Optional<House> opHouse = houseRepo.findById(id);
+        if (opHouse.isEmpty()){
+            throw new IdDoesNotExistException("house id not found");
+        }
+        return studentRepo.findByBestSingleScoreAndHouseId(id);
+    }
+    @Override
+    public List<Student> findStudentsWithBestSingleScoreByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException {
+        Optional<Course> opClass = courseRepo.findById(classId);
+        if (opClass.isEmpty()){
+            throw new IdDoesNotExistException("course id not found");
+        }
+        Optional<House> opHouse = houseRepo.findById(houseId);
+        if (opHouse.isEmpty()){
+            throw new IdDoesNotExistException("house id not found");
+        }
+        return studentRepo.findByBestSingleScoreAndHouseIdAndClassId(houseId,classId);
+    }
+
+    @Override
+    public List<Student> findBestStudentsByHouseId(long id) throws IdDoesNotExistException {
+        Optional<House> opHouse = houseRepo.findById(id);
+        if (opHouse.isEmpty()){
+            throw new IdDoesNotExistException("house id not found");
+        }
+        return studentRepo.findBestFromHouse(id);
+    }
+
+    @Override
+    public List<Student> findBestStudentsByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException {
+        Optional<House> opHouse = houseRepo.findById(houseId);
+        if (opHouse.isEmpty()){
+            throw new IdDoesNotExistException("house id not found");
+        }
+        Optional<Course> opClass = courseRepo.findById(classId);
+        if (opClass.isEmpty()){
+            throw new IdDoesNotExistException("class id not found");
+        }
+        return studentRepo.findBestFromHouseAndClass(houseId,classId);
+    }
+
+    @Override
+    public List<Student> findStudentWithScoreReasonContains(String reason) throws ResourceNotFoundException {
+        if (reason.isEmpty()) {
+            throw new ResourceNotFoundException("reason is empty");
+        }
+        return studentRepo.findScoresByReason(reason);
     }
 }

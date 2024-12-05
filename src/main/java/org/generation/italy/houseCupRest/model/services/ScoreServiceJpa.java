@@ -86,15 +86,12 @@ public class ScoreServiceJpa implements ScoreService{
         }
         return scoreRepositoryJpa.findByStudentId(id);
     }
-
     @Override
     public List<Score> findStudentWeeklyScores(long id) throws EntityNotFoundException {
         Optional<Student> opStudent = studentRepo.findById(id);
         if (opStudent.isEmpty()) {
             throw new EntityNotFoundException("student not found", opStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus(Period.ofDays(7)), LocalDate.now());
+        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus(Period.ofDays(6)), LocalDate.now());
     }
-
-
 }
