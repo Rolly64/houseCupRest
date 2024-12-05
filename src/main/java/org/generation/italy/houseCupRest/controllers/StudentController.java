@@ -6,6 +6,7 @@ import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.exceptions.IdDoesNotExistException;
+import org.generation.italy.houseCupRest.model.exceptions.ResourceNotFoundException;
 import org.generation.italy.houseCupRest.model.services.HouseService;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.ScoreService;
@@ -76,6 +77,17 @@ public class StudentController {
 
         }catch(IdDoesNotExistException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/score/reason/{reason}")
+    ResponseEntity<?> getStudentByScoreContainsWord(@PathVariable String reason){
+        try{
+            List<Student> students=registerService.findStudentByScoreReasonContainsWord(reason);
+            List<StudentDto> dtos = students.stream().map(StudentDto::new).toList();
+            return ResponseEntity.ok(dtos);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 

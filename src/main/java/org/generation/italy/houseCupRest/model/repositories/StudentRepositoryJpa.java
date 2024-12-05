@@ -11,28 +11,46 @@ public interface StudentRepositoryJpa extends JpaRepository<Student, Long> {
     //Richiesta dei migliori studenti di una determinata casa. (Indipendentemente dalla classe)
     @Query("""
             SELECT s
-            FROM student s
-            JOIN s.scores sc
-            WHERE s.house.id = :house.id
-                AND sc.points=(
-                    SELECT MAX(SUM(sc2.points))
-                    FROM score sc2
-                    WHERE sc2.student.house.id=:houseId
+            FROM Student s
+            JOIN s.house h
+            LEFT JOIN s.scores sc
+            WHERE h.id = :houseId
+            GROUP BY s.id
+            HAVING SUM(sc.points) = (
+                SELECT MAX(totalScore)
+                FROM (
+                    SELECT SUM(sc.points) as totalScore
+                    FROM Student s2
+                    JOIN s2.house h2
+                    LEFT JOIN s2.scores sc
+                    WHERE h2.id = :houseId
+                    GROUP BY s2.id
                 )
+            )
             """)
     List<Student> findBestByHouseId(@Param("houseId") long houseId);
 
     //Richiesta dei migliori studenti di una determinata casa e determinata classe.
     @Query("""
             SELECT s
-            FROM student s
-            JOIN s.scores sc
-            WHERE s.house.id = :house.id and s.course.id = :classId
-                AND sc.points=(
-                    SELECT MAX(SUM(sc2.points))
-                    FROM score sc2
-                    WHERE sc2.student.house.id=:houseId and s.course.id = :classId
+            FROM Student s
+            JOIN s.house h
+            LEFT JOIN s.scores sc
+            WHERE h.id = :houseId
+            AND s.course.id = :classId
+            GROUP BY s.id
+            HAVING SUM(sc.points) = (
+                SELECT MAX(totalScore)
+                FROM (
+                    SELECT SUM(sc.points) as totalScore
+                    FROM Student s2
+                    JOIN s2.house h2
+                    LEFT JOIN s2.scores sc
+                    WHERE h2.id = :houseId
+                    AND s2.course.id = :classId
+                    GROUP BY s2.id
                 )
+            )
             """)
     List<Student> findBestByHouseIdAndClassId(@Param("houseId") long houseId, @Param("classId") long classId);
 
@@ -41,7 +59,7 @@ public interface StudentRepositoryJpa extends JpaRepository<Student, Long> {
             SELECT s
             FROM student s
             JOIN s.scores sc
-            WHERE sc.motivation like :reason
+            WHERE sc.motivation like %:reason%
             """)
     List<Student> findScoreByWordInReason(@Param("reason") String reason);
 

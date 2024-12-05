@@ -4,11 +4,14 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.exceptions.IdDoesNotExistException;
+import org.generation.italy.houseCupRest.model.exceptions.ResourceNotFoundException;
 import org.generation.italy.houseCupRest.model.repositories.CourseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
+import org.hibernate.boot.model.source.spi.RelationalValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -146,7 +149,10 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Student> findStudentByScoreReasonContainsWord(String reason) {
+    public List<Student> findStudentByScoreReasonContainsWord(String reason) throws ResourceNotFoundException {
+        if(reason.isEmpty()){
+            throw new ResourceNotFoundException("Reason is empty.");
+        }
         return studentRepo.findScoreByWordInReason(reason);
     }
 
