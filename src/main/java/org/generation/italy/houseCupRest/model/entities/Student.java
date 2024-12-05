@@ -37,7 +37,7 @@ public class  Student {
     }
 
     public Student(long id, String firstname, String surname, LocalDate dob, char sex, String mail, String phone,
-                   String background, String education, boolean isPref, Course course, House house, List<Score> scoreList) {
+                   String background, String education, Boolean isPref, Course course, House house, List<Score> scoreList) {
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;
@@ -129,11 +129,11 @@ public class  Student {
         this.education = education;
     }
 
-    public boolean getIsPref() {
+    public Boolean getIsPref() {
         return isPref;
     }
 
-    public void setIsPref(boolean isPref) {
+    public void setIsPref(Boolean isPref) {
         this.isPref = isPref;
     }
 
@@ -161,6 +161,5 @@ public class  Student {
     public void setScores(List<Score> scores) {
         this.scores = scores;
     }
-
 
 }

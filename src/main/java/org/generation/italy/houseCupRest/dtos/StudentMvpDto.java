@@ -1,30 +1,18 @@
 package org.generation.italy.houseCupRest.dtos;
 
 import org.generation.italy.houseCupRest.model.StudentMvp;
-import org.generation.italy.houseCupRest.model.entities.Student;
 
-public class StudentDto {
-    private long id;
+public class StudentMvpDto {
     private String firstname, surname;
-
-    public StudentDto(){}
-    public StudentDto(long id, String firstname, String surname) {
-        this.id = id;
+    public StudentMvpDto(String firstname, String surname) {
         this.firstname = firstname;
         this.surname = surname;
     }
-    public StudentDto(Student s){
-        this.id = s.getId();
-        this.firstname = s.getFirstname();
-        this.surname = s.getSurname();
+    public StudentMvpDto(StudentMvp student) {
+        this.firstname = student.getFirstname();
+        this.surname = student.getSurname();
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public StudentMvpDto() {
     }
 
     public String getFirstname() {
