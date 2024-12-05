@@ -18,7 +18,7 @@ public interface ScoreService {
     Optional<Score> updateScore(Score score);
     List<Score> findStudentScores(long id,LocalDate startDate,LocalDate endDate) throws EntityNotFoundException;
     List<Student> findTopStudentSingleScoreByHouse(long id) throws IdNotFound;
-    List<Student> findTopStudentSingleScoreByHouseAndByClassId(long houseId,long classId) throws IdNotFound;
+    List<Student> findTopStudentSingleScoreByHouseAndByClassId(Long houseId,Long courseId) throws IdNotFound;
     List<Student>findBestStudentByHouseId(long id, LocalDate starDate,LocalDate endDate) throws IdNotFound;
     List<Student>findBestStudentByHouseIdAndClassId(long houseId,long classId) throws IdNotFound;
     List<Student> findDistinctStudentByMotivationContaining(String word);

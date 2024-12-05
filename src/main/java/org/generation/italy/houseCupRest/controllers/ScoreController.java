@@ -99,9 +99,9 @@ public class ScoreController {
         return ResponseEntity.ok(studentDtos);
     }
 
-    @GetMapping("/class/{classId}/house/{houseId}/bestSingleScore") //lo studente con il singolo punteggio più alto di una casa e di una classe
-    public ResponseEntity<List<StudentDto>> getStudentWithBestSingleScoreByHouseIdAndClassId(@PathVariable long houseId, @PathVariable long classId){
-        List<Student> topScorers = scoreService.findTopStudentSingleScoreByHouseAndByClassId(houseId, classId);
+    @GetMapping("/course/{courseId}/house/{houseId}/bestSingleScore") //lo studente con il singolo punteggio più alto di una casa e di una classe
+    public ResponseEntity<List<StudentDto>> getStudentWithBestSingleScoreByHouseIdAndClassId(@PathVariable Long houseId, @PathVariable Long courseId){
+        List<Student> topScorers = scoreService.findTopStudentSingleScoreByHouseAndByClassId(houseId, courseId);
         if(topScorers.isEmpty()){
             return ResponseEntity.notFound().build();
         }

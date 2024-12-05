@@ -23,12 +23,14 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
             SELECT s.student
             FROM Score s
             WHERE s.student.house.id = :houseId
-            AND s.points = (
-                SELECT MAX(SUM(s2.points))
+            GROUP BY s.student
+            HAVING SUM(s.points) = (
+                SELECT MAX(s2.points)
                 FROM Score s2
                 WHERE s2.student.house.id = :houseId
+                GROUP BY s2.student
             )
-           """)
+            """)
     List<Student> findTopStudentSingleScoreByHouse(
             @Param("houseId") long houseId
     );
@@ -36,62 +38,62 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     @Query("""
             SELECT s.student
             FROM Score s
-            WHERE s.student.house.id = :houseId AND s.student.course.id= :classId
-            AND s.points = (
-                SELECT MAX(SUM(s2.points))
-                FROM Score s2
-                WHERE s2.student.house.id = :houseId AND s.student.course.id= :classId
-            )
-           """)
+            JOIN s.student AS st
+            WHERE st.house.id = :houseId
+              AND (:courseId IS NULL OR st.course.id = :courseId)
+              AND s.points = (SELECT MAX(s2.points)
+                              FROM Score s2
+                              WHERE s2.student.house.id = :houseId
+                                AND (:courseId IS NULL OR s2.student.course.id = :courseId))
+            """)
     List<Student> findTopStudentSingleScoreByHouseAndByClassId(
-            @Param("houseId") long houseId,
-            @Param("classId") long classId
+            @Param("houseId") Long houseId,
+            @Param("courseId") Long courseId
     );
 
 
-
     @Query("""
-            SELECT s.student
-            FROM Score s
-            JOIN s.student st
-            WHERE st.house.id=:houseId
-             AND s.points=(
-                 SELECT MAX(s2.points)
-                 FROM Score s2
-                 WHERE s2.student.house.id=:houseId
-                 AND
-                 s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
-             )
-           """)
-    List<Student>findBestStudentByHouseId(
+             SELECT s.student
+             FROM Score s
+             JOIN s.student st
+             WHERE st.house.id=:houseId
+              AND s.points=(
+                  SELECT MAX(s2.points)
+                  FROM Score s2
+                  WHERE s2.student.house.id=:houseId
+                  AND
+                  s2.assignDate BETWEEN :startOfWeek AND :endOfWeek
+              )
+            """)
+    List<Student> findBestStudentByHouseId(
             @Param("houseId") long houseId,
             @Param("startOfWeek") LocalDate startOfWeek,
             @Param("endOfWeek") LocalDate endOfWeek
     );
 
     @Query("""
-             SELECT s.student
-            FROM Score s
-            JOIN s.student st
-            WHERE st.house.id=:houseId AND st.course.id= :classId
-                  AND s.points=(
-                 SELECT MAX(s2.points)
-                 FROM Score s2
-                 WHERE s2.student.house.id=:houseId AND s.student.course.id=:classId
-          
-             )
-           """)
-    List<Student>findBestStudentByHouseIdAndClassId(
+              SELECT s.student
+             FROM Score s
+             JOIN s.student st
+             WHERE st.house.id=:houseId AND st.course.id= :classId
+                   AND s.points=(
+                  SELECT MAX(s2.points)
+                  FROM Score s2
+                  WHERE s2.student.house.id=:houseId AND s.student.course.id=:classId
+            
+              )
+            """)
+    List<Student> findBestStudentByHouseIdAndClassId(
             @Param("houseId") long houseId,
             @Param("classId") long classId
     );
 
     @Query("""
-            SELECT distinct s.student
-            FROM Score s
-             WHERE s.motivation LIKE %:word%
-      
-           """)
+             SELECT distinct s.student
+             FROM Score s
+              WHERE s.motivation LIKE %:word%
+            
+            """)
     List<Student> findDistinctStudentByMotivationContaining(
             @Param("word") String word
     );

@@ -135,16 +135,16 @@ public class ScoreServiceJpa implements ScoreService{
 
 
     @Override
-    public List<Student> findTopStudentSingleScoreByHouseAndByClassId(long houseId, long classId) throws IdNotFound {
+    public List<Student> findTopStudentSingleScoreByHouseAndByClassId(Long houseId, Long courseId) throws IdNotFound {
         Optional<House> optHouse= houseRepositoryJpa.findById(houseId);
         if(optHouse.isEmpty()){
             throw new IdNotFound("house not found");
         }
-        Optional<Course> optCourse= courseRepositoryJpa.findById(classId);
+        Optional<Course> optCourse= courseRepositoryJpa.findById(courseId);
         if(optCourse.isEmpty()){
             throw new IdNotFound("course not found");
         }
-        return scoreRepositoryJpa.findTopStudentSingleScoreByHouseAndByClassId(houseId,classId);
+        return scoreRepositoryJpa.findTopStudentSingleScoreByHouseAndByClassId(houseId,courseId);
     }
 }
 
