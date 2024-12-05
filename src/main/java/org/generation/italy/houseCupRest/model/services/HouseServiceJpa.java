@@ -32,4 +32,9 @@ public class HouseServiceJpa implements HouseService {
     public List<Student> bestStudentsByHouseId(long id) {
         return houseRepo.bestStudentsByHouseId(id);
     }
+
+    @Override
+    public List<Student> bestStudentsByHouseAndClassId(long houseId, long courseId) {
+        return houseRepo.bestStudentsByHouseAndClassId(houseId, courseId);
+    }
 }

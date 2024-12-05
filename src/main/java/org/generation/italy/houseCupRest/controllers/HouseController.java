@@ -28,4 +28,13 @@ public class HouseController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/{houseId}/{courseId}/bStud")
+    public ResponseEntity<List<StudentDto>> bestStudentsByHouseAndClassId(@PathVariable long houseId, @PathVariable long courseId){
+        List<StudentDto> bestStud = houseService.bestStudentsByHouseAndClassId(houseId, courseId).stream().map(StudentDto::new).toList();
+        if(!bestStud.isEmpty()){
+            return ResponseEntity.ok(bestStud);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
