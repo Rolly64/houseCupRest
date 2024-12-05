@@ -1,12 +1,10 @@
 package org.generation.italy.houseCupRest.dtos;
 
 import org.generation.italy.houseCupRest.model.entities.Score;
-import org.generation.italy.houseCupRest.model.entities.Student;
-import org.generation.italy.houseCupRest.model.entities.Teacher;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ScoreDto {
     private long id;
@@ -34,7 +32,7 @@ public class ScoreDto {
         this.id = score.getId();
         this.points = score.getPoints();
         this.motivation = score.getMotivation();
-        this.assignDate = score.getAssign_date().format(DateTimeFormatter.ISO_DATE);
+        this.assignDate = score.getAssignDate().format(DateTimeFormatter.ISO_DATE);
         this.studentId = score.getStudent().getId();
         this.studentFullName = String.format("%s %s", score.getStudent().getFirstname(), score.getStudent().getSurname());
         this.teacherId = score.getTeacher().getId();
@@ -46,7 +44,7 @@ public class ScoreDto {
         score.setId(id);
         score.setPoints(points);
         score.setMotivation(motivation);
-        score.setAssign_date(LocalDate.parse(assignDate));
+        score.setAssignDate(LocalDate.parse(assignDate));
         //gli id dello studente e del teacher li manderà tramite un servizio nel controller
         return score;
     }
@@ -101,5 +99,9 @@ public class ScoreDto {
 
     public void setTeacherFullName(String teacherFullName) {
         this.teacherFullName = teacherFullName;
+    }
+
+    public static List<ScoreDto> fromScores(List<Score> scores) {
+        return scores.stream().map(ScoreDto::new).toList();
     }
 }

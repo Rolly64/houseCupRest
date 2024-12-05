@@ -3,6 +3,7 @@ package org.generation.italy.houseCupRest.model.services;
 import org.generation.italy.houseCupRest.model.entities.*;
 import org.generation.italy.houseCupRest.model.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -100,16 +101,41 @@ public class RegisterServiceJpa implements RegisterService{
     public Student saveStudent(Student s) {
         return studentRepo.save(s);
     }
-
-
-
     @Override
     public List<Score> showScoresByStudentId(Long id) {
         return scoreRepo.findByStudentId(id);
     }
-
+    @Override
+    public List<Score> showWeeklyScoresByStudentId(Long id, LocalDate ld1, LocalDate ld2) {
+        return scoreRepo.findByStudentIdAndAssignDateBetween(id, ld1, ld2);
+    }
     @Override
     public Optional<Student> findStudentById(long id) {
         return studentRepo.findById(id);
     }
+    @Override
+    public List<Student> showBestStudentsByHouse(Long id) {
+//        return studentRepo.findStudentByHouseIdOrderByScoresDesc(id);
+        return studentRepo.findBestStudentsByHouse(id);
+    }
+    @Override
+    public List<Student> showBestStudentsByHouseInAClass(Long courseId, Long houseId) {
+        return studentRepo.findBestStudentByCourseAndHouse(courseId, houseId);
+    }
+    @Override
+    public List<Student> findStudentsByScoreMotivationLike(String word) {
+        return studentRepo.findByScoresMotivationContainingIgnoreCase(word);
+    }
+
+    @Override
+    public List<Student> findStudentByMaxPoints() {
+        return studentRepo.findStudentsByBestSingleScore();
+    }
+
+    @Override
+    public List<Student> findStudentsByMaxPointsAndCourseAndHouse(long courseId, long houseId) {
+        return studentRepo.findStudentsByBestSingleScoreAndHouseAndClass(courseId, houseId);
+    }
+
+
 }

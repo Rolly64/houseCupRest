@@ -12,4 +12,5 @@ public interface ScoreService {
     Score updateScore(Score score);
     boolean deleteScoreById(long id);
 
+
 }

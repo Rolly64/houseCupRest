@@ -8,7 +8,7 @@ import java.util.List;
 public class StudentDto {
     private long id;
     private String firstname, surname;
-    private List<Score> scores;
+    private List<ScoreDto> scores;
 
     public StudentDto(){}
     public StudentDto(long id, String firstname, String surname) {
@@ -20,6 +20,7 @@ public class StudentDto {
         this.id = s.getId();
         this.firstname = s.getFirstname();
         this.surname = s.getSurname();
+        this.scores = s.getScores().stream().map(ScoreDto::new).toList();
     }
 
     public long getId() {
@@ -39,5 +40,15 @@ public class StudentDto {
     }
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+    public List<ScoreDto> getScores() {
+        return scores;
+    }
+    public void setScores(List<ScoreDto> scores) {
+        this.scores = scores;
+    }
+
+    public static List<StudentDto> fromStudents(List<Student> students) {
+        return students.stream().map(StudentDto::new).toList();
     }
 }
