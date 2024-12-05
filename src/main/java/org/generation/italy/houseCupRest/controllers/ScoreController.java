@@ -96,7 +96,7 @@ public class ScoreController {
         return ResponseEntity.ok(dto);
     }
     @GetMapping("search/jojo")
-    public ResponseEntity<List<StudentDto>> findStudentByKeyWord() {
+    public ResponseEntity<List<StudentDto>> findHighestSingleScorerBySingleScore() {
         List<Student> students = sService.findHighestSingleScorerBySingleScore();
         List<StudentDto> dto = students.stream().map(StudentDto::new).toList();
         return ResponseEntity.ok(dto);

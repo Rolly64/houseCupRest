@@ -43,9 +43,4 @@ public class StudentDto {
         this.surname = surname;
     }
 }
-select * student.s
-from score as s
-join students as s
-using student.id = score.id
-
 
