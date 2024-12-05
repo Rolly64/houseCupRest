@@ -27,14 +27,24 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
     List<Score> findCurrentWeekScore(@Param("startOfWeek") LocalDate startOfWeek, @Param("endOfWeek")  LocalDate endOfWeek, @Param("studentId") Long studentId);
 
     @Query("""
-            SELECT new org.generation.italy.houseCupRest.model.StudentMvp(s.student.firstname, s.student.surname)
-            FROM Score AS s
-            JOIN s.student AS st
-            WHERE st.house.id = :houseId
-            GROUP BY s.student.id, s.student.firstname, s.student.surname
-            ORDER BY SUM(s.points) DESC
-            """)
+        SELECT new org.generation.italy.houseCupRest.model.StudentMvp (st.firstname, st.surname)
+        FROM Score s
+        JOIN student st ON s.student.id = st.id
+        WHERE st.house.id = :houseId
+        GROUP BY st.id, st.firstname, st.surname
+        HAVING SUM(s.points) = (
+            SELECT MAX(total_points)
+            FROM (
+                SELECT SUM(s2.points) AS total_points
+                FROM Score s2
+                JOIN student st2 ON s2.student.id = st2.id
+                WHERE st2.house.id = :houseId
+                GROUP BY st2.id
+            ) subquery
+        )
+       """)
     List<StudentMvp> findMvpByHouseId(@Param("houseId") Long houseId);
+
     @Query("""
         SELECT s.student
         FROM Score AS s
@@ -42,12 +52,14 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
         WHERE s.motivation LIKE %:keyWord%
         """)
     List<Student> findStudentByKeyWord(@Param("keyWord") String keyWord);
+
     @Query("""
         SELECT s.student
         FROM Score s
         WHERE s.points = (SELECT MAX(s2.points) FROM Score s2)
         """)
     List<Student> findHighestSingleScorerBySingleScore();
+
     @Query("""
      SELECT s.student
      FROM Score s
@@ -60,7 +72,4 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
                          AND (:courseId IS NULL OR s2.student.course.id = :courseId))
      """)
     List<Student> findTheBestStudentsByClassAndHouseId(@Param("houseId") Long houseId, @Param("courseId") Long courseId);
-
-
-
 }
