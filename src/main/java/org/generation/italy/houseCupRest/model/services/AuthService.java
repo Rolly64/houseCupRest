@@ -1,8 +1,16 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.controllers.AuthenticationRequest;
+import org.generation.italy.houseCupRest.controllers.AuthenticationResponse;
+import org.generation.italy.houseCupRest.controllers.RegisterRequest;
+import org.generation.italy.houseCupRest.model.entities.User;
+import org.generation.italy.houseCupRest.model.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
