@@ -9,7 +9,10 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -93,8 +96,7 @@ public class ScoreServiceJpa implements ScoreService{
         if (opStudent.isEmpty()) {
             throw new EntityNotFoundException("student not found", opStudent.getClass().getSimpleName());
         }
-        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus(Period.ofDays(7)), LocalDate.now());
+        return scoreRepositoryJpa.findByStudentIdAndAssignDateBetween(id, LocalDate.now().minus(Period.ofDays(6)), LocalDate.now());
     }
-
 
 }
