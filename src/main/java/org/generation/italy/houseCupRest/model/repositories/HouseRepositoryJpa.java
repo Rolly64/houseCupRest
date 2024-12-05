@@ -48,14 +48,13 @@ public interface HouseRepositoryJpa extends JpaRepository<House, Long> {
             """)
     List<Student> bestStudentsByHouseId (@Param("houseId") long houseId);
 
-    @Query("""
+    @Query(value = """
             SELECT s
             FROM Student s
             JOIN s.house h
-            JOIN s.class c
             LEFT JOIN s.scores sc
             WHERE h.id = :houseId
-            AND c.id = :classId
+            AND s.course.id = :courseId
             GROUP BY s.id
             HAVING SUM(sc.points) = (
                 SELECT MAX(totalScore)
@@ -65,6 +64,7 @@ public interface HouseRepositoryJpa extends JpaRepository<House, Long> {
                     JOIN s2.house h2
                     LEFT JOIN s2.scores sc
                     WHERE h2.id = :houseId
+                    AND s2.course.id = :courseId
                     GROUP BY s2.id
                 )
             )
