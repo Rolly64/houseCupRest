@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="students")
@@ -23,7 +24,7 @@ public class  Student {
     private String background;
     private String education;
     @Column(name = "is_pref")
-    private boolean isPref;
+    private Boolean isPref = false;
     @ManyToOne
     @JoinColumn(name="class_id")
     private Course course;
@@ -47,7 +48,7 @@ public class  Student {
         this.phone = phone;
         this.background = background;
         this.education = education;
-        this.isPref = isPref;
+        this.isPref = Objects.requireNonNullElse(isPref, false);
         this.course = course;
         this.house = house;
         this.scores = scoreList;
@@ -122,10 +123,10 @@ public class  Student {
     }
 
     public boolean getIsPref() {
-        return isPref;
+        return isPref != null && isPref;
     }
 
-    public void setIsPref(boolean isPref) {
+    public void setIsPref(Boolean isPref) {
         this.isPref = isPref;
     }
 

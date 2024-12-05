@@ -13,6 +13,7 @@ public class Score {
     private long id;
     private int points;
     private String motivation;
+
     private LocalDate assign_date;
     @ManyToOne
     @JoinColumn(name = "stud_id")
