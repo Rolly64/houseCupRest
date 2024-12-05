@@ -2,6 +2,7 @@ package org.generation.italy.houseCupRest.model.services;
 
 import org.generation.italy.houseCupRest.model.HouseRanking;
 import org.generation.italy.houseCupRest.model.entities.House;
+import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,10 @@ public class HouseServiceJpa implements HouseService {
             rankings.add(ranking);
         }
         return rankings;
+    }
+
+    @Override
+    public List<Student> bestStudentsByHouseId(long id) {
+        return houseRepo.bestStudentsByHouseId(id);
     }
 }

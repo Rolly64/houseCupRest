@@ -10,7 +10,6 @@ import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +22,6 @@ public class ScoreServiceJpa implements ScoreService{
         this.scoreRepositoryJpa = scoreRepositoryJpa;
         this.studentRepositoryJpa = studentRepositoryJpa;
         this.teacherRepositoryJpa = teacherRepositoryJpa;
-
     }
 
     @Override
@@ -62,10 +60,5 @@ public class ScoreServiceJpa implements ScoreService{
             scoreRepositoryJpa.save(s);
         }
         return Optional.ofNullable(score);
-    }
-
-    @Override
-    public List<Score> scoreHistoryByStudentId(long id) {
-        return scoreRepositoryJpa.scoreHistoryByStudentId(id).stream().toList();
     }
 }

@@ -13,5 +13,4 @@ public interface ScoreService {
     Optional<Score> findById(long id);
     Optional<Score> deleteById(long id);
     Optional<Score> update(Score s);
-    List<Score> scoreHistoryByStudentId(long id);
 }

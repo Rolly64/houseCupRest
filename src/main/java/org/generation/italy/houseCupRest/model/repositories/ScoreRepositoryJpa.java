@@ -8,10 +8,5 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
-    @Query("""
-            SELECT s
-            FROM Score s
-            WHERE s.student.id = :studentId
-            """)
-    List<Score> scoreHistoryByStudentId(@Param("studentId") long studentId);
+
 }

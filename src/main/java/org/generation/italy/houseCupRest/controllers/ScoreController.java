@@ -27,23 +27,6 @@ public class ScoreController {
         this.scoreService = scoreService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<?> create(@RequestBody ScoreDto dto, UriComponentsBuilder uriBuilder){
-//        Score score = dto.toScore();
-//        Optional<Student> oSt = regService.findStudentById(dto.studentId());
-//        if(oSt.isEmpty()){
-//            return new ResponseEntity<>("studente non trovato", HttpStatus.NOT_FOUND);
-//        }
-//        Optional<Teacher> oT = regService.findTeacherById(dto.teacherId());
-//        if(oT.isEmpty()){
-//            return new ResponseEntity<>("insegnante non trovato", HttpStatus.NOT_FOUND);
-//        }
-//        score.setStudent(oSt.get());
-//        score.setTeacher(oT.get());
-//        scoreService.save(score);
-//        URI location = uriBuilder.path("/score/{id}").buildAndExpand(score.getId()).toUri();
-//        return ResponseEntity.created(location).body(ScoreDto.fromScore(score));
-//    }
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ScoreDto dto, UriComponentsBuilder uriBuilder){
         Score score = dto.toScore();
@@ -58,11 +41,12 @@ public class ScoreController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody ScoreDto scoreDto, @PathVariable long id) {
-        Score score = scoreDto.toScore();
-        score.setId(id);
-        Optional<Score> updated = scoreService.update(score);
-        if(updated.isPresent()){
-            return ResponseEntity.ok(score);
+        if(scoreDto.id() == id){
+            Score score = scoreDto.toScore();
+            if (scoreService.update(score).isPresent()) {
+                return ResponseEntity.ok(score);
+            }
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.notFound().build();
     }
@@ -75,10 +59,5 @@ public class ScoreController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<?> scoreHistoryByStudentId(@PathVariable long id){
-
-        return ResponseEntity.notFound().build();
     }
 }
