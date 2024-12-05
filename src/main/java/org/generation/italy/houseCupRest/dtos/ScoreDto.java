@@ -14,7 +14,7 @@ public class ScoreDto {
 
     public ScoreDto() {
     }
-    public ScoreDto(long id,int score, String reason, long studentId, long teacherId, LocalDate date) {
+    public ScoreDto(long id, int score, String reason, long studentId, long teacherId, LocalDate date) {
         this.id=id;
         this.score = score;
         this.reason = reason;

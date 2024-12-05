@@ -1,6 +1,8 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Score;
+import org.generation.italy.houseCupRest.model.entities.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,5 +16,9 @@ public interface ScoreService {
     Optional<Score> deleteScoreById(long id);
     Score saveScore(Score score, long studentId, long teacherId);
     List<Score> findPointsByStudentId(long studentId);
-    List<Score> findCurrentWeekScore(long studentId);
+    List<Score> findStudentWeekScores(long studentId);
+    List<StudentMvp> findMvpByHouseId(long houseId);
+    List<Student> findStudentByKeyWord(String keyWord);
+    List<Student> findHighestSingleScorerBySingleScore();
+    List<Student> findTheBestStudentsByClassAndHouseId(Long houseId, Long courseId);
 }

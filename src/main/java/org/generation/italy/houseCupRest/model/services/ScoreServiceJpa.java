@@ -1,6 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
-import org.generation.italy.houseCupRest.model.entities.Course;
+import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
@@ -9,7 +9,6 @@ import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -87,11 +86,31 @@ public class ScoreServiceJpa implements ScoreService{
     }
 
     @Override
-    public List<Score> findCurrentWeekScore(long studentId) {
+    public List<Score> findStudentWeekScores(long studentId) {
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(DayOfWeek.MONDAY);
         LocalDate endOfWeek = today.with(DayOfWeek.SUNDAY);
-        return scoreRepositoryJpa.findCurrentWeekScore(startOfWeek,endOfWeek,studentId);
+        return scoreRepositoryJpa.findCurrentWeekScore(startOfWeek, endOfWeek, studentId);
+    }
+
+    @Override
+    public List<StudentMvp> findMvpByHouseId(long houseId) {
+        return scoreRepositoryJpa.findMvpByHouseId(houseId);
+    }
+
+    @Override
+    public List<Student> findStudentByKeyWord(String keyWord) {
+        return scoreRepositoryJpa.findStudentByKeyWord(keyWord);
+    }
+
+    @Override
+    public List<Student> findHighestSingleScorerBySingleScore() {
+        return scoreRepositoryJpa.findHighestSingleScorerBySingleScore();
+    }
+
+    @Override
+    public List<Student> findTheBestStudentsByClassAndHouseId(Long houseId, Long courseId) {
+        return scoreRepositoryJpa.findTheBestStudentsByClassAndHouseId(houseId, courseId);
     }
 
 

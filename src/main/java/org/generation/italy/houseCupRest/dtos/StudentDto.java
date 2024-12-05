@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.dtos;
 
+import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Student;
 
 public class StudentDto {
