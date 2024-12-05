@@ -18,6 +18,7 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
 
     List<Score> findByStudentId(long studentId);
 
+
     @Query("""
             SELECT s.student
             FROM Score s
@@ -84,6 +85,17 @@ public interface ScoreRepositoryJpa extends JpaRepository<Score, Long> {
             @Param("houseId") long houseId,
             @Param("classId") long classId
     );
+
+    @Query("""
+            SELECT distinct s.student
+            FROM Score s
+             WHERE s.motivation LIKE %:word%
+      
+           """)
+    List<Student> findDistinctStudentByMotivationContaining(
+            @Param("word") String word
+    );
+
 
 }
 

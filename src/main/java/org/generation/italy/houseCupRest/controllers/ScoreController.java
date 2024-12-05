@@ -128,4 +128,15 @@ public class ScoreController {
         return ResponseEntity.ok(studentDtos);
 
     }
+
+    @GetMapping("motivation/{word}/score")
+    public ResponseEntity<List<StudentDto>> getStudentByFindWordInMotivation(@PathVariable  String word){
+        List<Student> students = scoreService.findDistinctStudentByMotivationContaining(word);
+        if(students.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        List<StudentDto> studentsDto = students.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(studentsDto);
+
+    }
 }

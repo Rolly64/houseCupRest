@@ -128,6 +128,13 @@ public class ScoreServiceJpa implements ScoreService{
     }
 
     @Override
+    public List<Student> findDistinctStudentByMotivationContaining(String word) {
+
+        return scoreRepositoryJpa.findDistinctStudentByMotivationContaining(word);
+    }
+
+
+    @Override
     public List<Student> findTopStudentSingleScoreByHouseAndByClassId(long houseId, long classId) throws IdNotFound {
         Optional<House> optHouse= houseRepositoryJpa.findById(houseId);
         if(optHouse.isEmpty()){
