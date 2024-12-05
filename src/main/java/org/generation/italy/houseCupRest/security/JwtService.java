@@ -1,4 +1,4 @@
-package org.generation.italy.houseCupRest.model.services;
+package org.generation.italy.houseCupRest.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

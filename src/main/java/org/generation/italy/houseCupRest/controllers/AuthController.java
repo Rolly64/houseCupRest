@@ -1,7 +1,7 @@
 package org.generation.italy.houseCupRest.controllers;
 
 
-import org.generation.italy.houseCupRest.model.services.AuthService;
+import org.generation.italy.houseCupRest.security.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
