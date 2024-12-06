@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @RestController
 @RequestMapping("/api/auth")
 
@@ -21,8 +18,6 @@ public class AuthController {
     public AuthController(AuthService service) {
         this.service = service;
     }
-
-
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request

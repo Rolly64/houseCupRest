@@ -34,7 +34,6 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-
     public AuthenticationResponse register(RegisterRequest request) {
         logger.info("Register method called with request: {}", request);
 

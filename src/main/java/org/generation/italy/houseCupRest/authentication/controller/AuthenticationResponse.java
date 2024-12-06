@@ -1,8 +1,6 @@
 package org.generation.italy.houseCupRest.authentication.controller;
 
 
-
-
 public class AuthenticationResponse {
     private String token;
 
