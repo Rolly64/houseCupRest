@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.dtos;
 
-import org.generation.italy.houseCupRest.model.StudentMvp;
 import org.generation.italy.houseCupRest.model.entities.Student;
 
 public class StudentDto {
@@ -22,23 +21,18 @@ public class StudentDto {
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public String getFirstname() {
         return firstname;
     }
-
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
-
     public String getSurname() {
         return surname;
     }
-
     public void setSurname(String surname) {
         this.surname = surname;
     }

@@ -20,9 +20,7 @@ public class House {
     private List<Student> students = new ArrayList<>();
 
     public House(){
-
     }
-
     public House(long id, String houseName, String houseImage) {
         this.id = id;
         this.houseName = houseName;
@@ -32,19 +30,15 @@ public class House {
     public long getId() {
         return id;
     }
-
     public String getHouseName() {
         return houseName;
     }
-
     public void setHouseName(String houseName) {
         this.houseName = houseName;
     }
-
     public List<Student> getStudents() {
         return students;
     }
-
     public void setStudents(List<Student> students) {
         this.students = students;
     }

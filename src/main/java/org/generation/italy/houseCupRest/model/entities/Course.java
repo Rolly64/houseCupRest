@@ -23,10 +23,9 @@ public class Course {
     private List<Student> students = new ArrayList<>();
     @ManyToMany(mappedBy = "courses")
     private List<Teacher> teachers = new ArrayList<>();
+
     public Course(){
-
     }
-
     public Course(long id, String className) {
         this.id = id;
         this.className = className;
@@ -39,47 +38,36 @@ public class Course {
     public void setId(long id) {
         this.id = id;
     }
-
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
-
     public long getId(){
         return id;
     }
-
     public String getClassName() {
         return className;
     }
-
     public void setClassName(String className) {
         this.className = className;
     }
-
     public LocalDate getStartDate() {
         return startDate;
     }
-
     public LocalDate getEndDate() {
         return endDate;
     }
-
     public List<Student> getStudents() {
         return students;
     }
-
     public void setStudents(List<Student> students) {
         this.students = students;
     }
-
     public List<Teacher> getTeachers() {
         return teachers;
     }
-
     public void setTeachers(List<Teacher> teachers) {
         this.teachers = teachers;
     }

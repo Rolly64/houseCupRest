@@ -1,8 +1,5 @@
 package org.generation.italy.houseCupRest.controllers;
 
-
-
-
 public class AuthenticationRequest {
     private String email;
     String password;
@@ -11,22 +8,18 @@ public class AuthenticationRequest {
         this.email = email;
         this.password = password;
     }
-
     public AuthenticationRequest() {
     }
 
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }

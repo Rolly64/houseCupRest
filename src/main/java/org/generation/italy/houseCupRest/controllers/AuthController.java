@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.controllers;
 
-
 import org.generation.italy.houseCupRest.security.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +18,16 @@ public class AuthController {
         this.service = service;
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
-    ) {
+    ){
         return ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(
             @RequestBody AuthenticationRequest request
-    ) {
+    ){
         return ResponseEntity.ok(service.login(request));
     }
 }

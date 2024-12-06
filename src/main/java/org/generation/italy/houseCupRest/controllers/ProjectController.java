@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.controllers;
 
-
 import org.generation.italy.houseCupRest.model.entities.Project;
 import org.generation.italy.houseCupRest.model.entities.Task;
 import org.generation.italy.houseCupRest.model.services.ProjectService;
@@ -15,7 +14,6 @@ import java.util.Optional;
 @RequestMapping("/api/projects")
 public class ProjectController {
     private final ProjectService projectService;
-
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
     }
@@ -34,12 +32,10 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @PostMapping
     public Project createProject(@RequestBody Project project) {
         return projectService.saveProject(project);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
         Optional<Project> project = projectService.getProjectById(id);
@@ -60,7 +56,6 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         projectService.deleteProject(id);

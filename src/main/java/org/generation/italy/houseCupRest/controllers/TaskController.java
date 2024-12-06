@@ -1,6 +1,5 @@
 package org.generation.italy.houseCupRest.controllers;
 
-
 import org.generation.italy.houseCupRest.model.entities.Task;
 import org.generation.italy.houseCupRest.model.services.TaskService;
 import org.springframework.http.ResponseEntity;

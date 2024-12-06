@@ -38,43 +38,33 @@ public class ScoreDto {
     public void setScore(int score) {
         this.score = score;
     }
-
     public String getReason() {
         return reason;
     }
-
     public long getId() {
         return id;
     }
-
     public void setId(long id) {
         this.id = id;
     }
-
     public void setReason(String reason) {
         this.reason = reason;
     }
-
     public long getStudentId() {
         return studentId;
     }
-
     public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
-
     public long getTeacherId() {
         return teacherId;
     }
-
     public void setTeacherId(long teacherId) {
         this.teacherId = teacherId;
     }
-
     public LocalDate getDate() {
         return date;
     }
-
     public void setDate(LocalDate date) {
         this.date = date;
     }
@@ -93,5 +83,4 @@ public class ScoreDto {
         s.setTeacher(teacher);
         return s;
     }
-
 }
