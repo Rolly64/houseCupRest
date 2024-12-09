@@ -1,6 +1,8 @@
 package org.generation.italy.houseCupRest.controllers;
 
 import org.generation.italy.houseCupRest.dtos.HouseDto;
+import org.generation.italy.houseCupRest.dtos.HouseRankingDto;
+import org.generation.italy.houseCupRest.model.HouseRanking;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.services.HouseService;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,11 @@ public class HouseController {
         this.houseService = houseService;
     }
     @GetMapping
-    public ResponseEntity<List<HouseDto>> getAllHouses(){
+    public ResponseEntity<?> getAllHouses(){
         List<House> houses = this.houseService.getAllHouses();
+        //List<HouseRanking> hs = this.houseService.getRankings();
         List<HouseDto> houseDtos = houses.stream().map(HouseDto::new).toList();
+        //HouseRankingDto dto = new HouseRankingDto(hs);
         return ResponseEntity.ok(houseDtos);
     }
 }

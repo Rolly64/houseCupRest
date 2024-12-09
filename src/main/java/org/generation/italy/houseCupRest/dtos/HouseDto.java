@@ -15,12 +15,35 @@ public class HouseDto {
         this.name = name;
         this.score = score;
     }
-
     public HouseDto(House h) {
         this.id = h.getId();
         this.name = h.getHouseName();
     }
     public static HouseDto fromHouseRanking(HouseRanking hr){
         return new HouseDto(hr.getHouse().getId(), hr.getHouse().getHouseName(), hr.getTotalScore());
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }
