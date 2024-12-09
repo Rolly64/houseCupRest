@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.dtos.HouseDto;
 import org.generation.italy.houseCupRest.model.HouseRanking;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
@@ -25,5 +26,9 @@ public class HouseServiceJpa implements HouseService {
             rankings.add(ranking);
         }
         return rankings;
+    }
+    @Override
+    public List<House> getAllHouses() {
+        return houseRepo.findAll();
     }
 }

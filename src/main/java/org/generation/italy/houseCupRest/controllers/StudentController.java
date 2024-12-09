@@ -26,6 +26,12 @@ public class StudentController {
         this.scoreService = scoreService;
         this.regService = regService;
     }
+    @GetMapping
+    public ResponseEntity<List<StudentDto>> getAllStudents() {
+        var sts = this.regService.findAllStudents();
+        var dto = sts.stream().map(StudentDto::new).toList();
+        return ResponseEntity.ok(dto);
+    }
     @GetMapping("/{id}/score")
     ResponseEntity<?> findStudentScores(@PathVariable long id) {
         try {

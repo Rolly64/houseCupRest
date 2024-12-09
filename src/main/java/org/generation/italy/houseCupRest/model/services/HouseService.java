@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface HouseService {
    List<HouseRanking> getRankings();
-
+   List<House> getAllHouses();
 }
