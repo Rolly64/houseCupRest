@@ -18,7 +18,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins="http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/score")
 public class ScoreController {

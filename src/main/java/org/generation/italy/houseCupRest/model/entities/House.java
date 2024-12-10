@@ -50,4 +50,8 @@ public class House {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
+
+    public String getHouseImage() {
+        return houseImage;
+    }
 }

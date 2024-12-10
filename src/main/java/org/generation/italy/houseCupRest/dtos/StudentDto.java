@@ -4,18 +4,19 @@ import org.generation.italy.houseCupRest.model.entities.Student;
 
 public class StudentDto {
     private long id;
-    private String firstname, surname;
+    private String name;
+    private String course;
 
     public StudentDto(){}
-    public StudentDto(long id, String firstname, String surname) {
+    public StudentDto(long id, String name,String course) {
         this.id = id;
-        this.firstname = firstname;
-        this.surname = surname;
+        this.name = name;
+        this.course = course;
     }
     public StudentDto(Student s){
         this.id = s.getId();
-        this.firstname = s.getFirstname();
-        this.surname = s.getSurname();
+        this.name = s.getFirstname() +" "+ s.getSurname();
+        this.course = s.getCourse().getClassName();
     }
 
     public long getId() {
@@ -26,19 +27,19 @@ public class StudentDto {
         this.id = id;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getCourse() {
+        return course;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setCourse(String course) {
+        this.course = course;
     }
 }
