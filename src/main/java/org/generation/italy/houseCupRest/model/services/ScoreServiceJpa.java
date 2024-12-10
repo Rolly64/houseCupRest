@@ -14,51 +14,56 @@ import java.util.Optional;
 
 @Service
 public class ScoreServiceJpa implements ScoreService{
-    private ScoreRepositoryJpa scoreRepositoryJpa;
-    private StudentRepositoryJpa studentRepositoryJpa;
-    private TeacherRepositoryJpa teacherRepositoryJpa;
+    private ScoreRepositoryJpa scoreRepo;
+    private StudentRepositoryJpa studentRepo;
+    private TeacherRepositoryJpa teacherRepo;
     @Autowired
-    public ScoreServiceJpa(ScoreRepositoryJpa scoreRepositoryJpa, StudentRepositoryJpa studentRepositoryJpa, TeacherRepositoryJpa teacherRepositoryJpa) {
-        this.scoreRepositoryJpa = scoreRepositoryJpa;
-        this.studentRepositoryJpa = studentRepositoryJpa;
-        this.teacherRepositoryJpa = teacherRepositoryJpa;
+    public ScoreServiceJpa(ScoreRepositoryJpa scoreRepo, StudentRepositoryJpa studentRepo, TeacherRepositoryJpa teacherRepo) {
+        this.scoreRepo = scoreRepo;
+        this.studentRepo = studentRepo;
+        this.teacherRepo = teacherRepo;
     }
 
     @Override
     public Score save(Score score) {
-        return scoreRepositoryJpa.save(score);
+        return scoreRepo.save(score);
     }
-    @Override
-    public Score saveScore(Score score, long studentId, long teacherId) throws EntityNotFoundException{
-        Optional<Student> oSt = studentRepositoryJpa.findById(studentId);
-        Optional<Teacher> oT = teacherRepositoryJpa.findById(teacherId);
-        if(oSt.isEmpty() || oT.isEmpty()){
-            throw new EntityNotFoundException("entità non trovata",
-                    oSt.isEmpty() ? Student.class.getSimpleName() : Teacher.class.getSimpleName());
-        }
-        score.setStudent(oSt.get());
-        score.setTeacher(oT.get());
-        scoreRepositoryJpa.save(score);
-        return score;
-    }
+
     @Override
     public Optional<Score> findById(long id) {
-        return scoreRepositoryJpa.findById(id);
+        return scoreRepo.findById(id);
     }
+
     @Override
-    public Optional<Score> deleteById(long id){
-        scoreRepositoryJpa.deleteById(id);
-        return scoreRepositoryJpa.findById(id);
-    }
-    @Override
-    public Optional<Score> update(Score s) {
-        Optional<Score> oS = scoreRepositoryJpa.findById(s.getId());
-        Score score = null;
-        if(oS.isPresent()){
-            score = new Score(oS.get().getId(), oS.get().getPoints(), oS.get().getMotivation(),
-                    oS.get().getAssignDate(), oS.get().getStudent(), oS.get().getTeacher());
-            scoreRepositoryJpa.save(s);
+    public Score saveScore(Score score, long studentId, long teacherId) throws EntityNotFoundException{
+        Optional<Student> oStudent = studentRepo.findById(studentId);
+        Optional<Teacher> oTeacher = teacherRepo.findById(teacherId);
+        if(oStudent.isEmpty() || oTeacher.isEmpty()) {
+            throw new EntityNotFoundException("Entità non trovata", oStudent.isEmpty() ?
+                    Student.class.getSimpleName() : Teacher.class.getSimpleName());
         }
-        return Optional.ofNullable(score);
+        score.setStudent(oStudent.get());
+        score.setTeacher(oTeacher.get());
+        scoreRepo.save(score);
+        return score;
     }
+
+    @Override
+    public Score updateScore(Score score){
+        scoreRepo.save(score);
+        return score;
+
+    }
+
+    @Override
+    public boolean deleteScoreById(long id) {
+        Optional<Score> optScore = scoreRepo.findById(id);
+        if(optScore.isPresent()) {
+            scoreRepo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+
 }

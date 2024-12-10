@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.dtos;
 
+import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 public class StudentDto {
     private long id;
     private String firstname, surname;
+    private List<ScoreDto> scores;
 
     public StudentDto(){}
     public StudentDto(long id, String firstname, String surname) {
@@ -18,6 +20,7 @@ public class StudentDto {
         this.id = s.getId();
         this.firstname = s.getFirstname();
         this.surname = s.getSurname();
+        this.scores = s.getScores().stream().map(ScoreDto::new).toList();
     }
     public static List<StudentDto> fromStudents(List<Student> students){
         return students.stream().map(StudentDto::new).toList();
@@ -40,5 +43,15 @@ public class StudentDto {
     }
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+    public List<ScoreDto> getScores() {
+        return scores;
+    }
+    public void setScores(List<ScoreDto> scores) {
+        this.scores = scores;
+    }
+
+    public static List<StudentDto> fromStudents(List<Student> students) {
+        return students.stream().map(StudentDto::new).toList();
     }
 }
