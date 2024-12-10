@@ -32,10 +32,11 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req -> req.requestMatchers(WHITE_LIST_URL)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+//                        req -> req.requestMatchers(WHITE_LIST_URL)
+//                                .permitAll()
+//                                .anyRequest()
+//                                .authenticated()
+                        req -> req.anyRequest().permitAll() // AUTENTICAZIONE DISATTIVATA
                 )
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

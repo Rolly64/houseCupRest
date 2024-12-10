@@ -22,9 +22,6 @@ public class StudentDto {
         this.surname = s.getSurname();
         this.scores = s.getScores().stream().map(ScoreDto::new).toList();
     }
-    public static List<StudentDto> fromStudents(List<Student> students){
-        return students.stream().map(StudentDto::new).toList();
-    }
 
     public long getId() {
         return id;

@@ -26,9 +26,10 @@ public class HouseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HouseDto>> getAllHouses(){ // VERY BAD
+    public ResponseEntity<List<HouseDto>> getAllHouses(){
         return ResponseEntity.ok(registerService.getAllHouses().stream().map(HouseDto::fromHouse).toList());
     }
+
     @GetMapping("/{id}/bStud")
     public ResponseEntity<List<StudentDto>> bestStudentsByHouseId(@PathVariable long id){
         List<StudentDto> bestStud = houseService.bestStudentsByHouseId(id).stream().map(StudentDto::new).toList();

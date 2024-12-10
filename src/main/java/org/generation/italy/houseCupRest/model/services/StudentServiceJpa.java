@@ -3,6 +3,7 @@ package org.generation.italy.houseCupRest.model.services;
 import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
+import org.generation.italy.houseCupRest.model.repositories.ScoreRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +13,20 @@ import java.util.List;
 @Service
 public class StudentServiceJpa implements StudentService{
     private StudentRepositoryJpa studentRepositoryJpa;
+    private ScoreRepositoryJpa scoreRepositoryJpa;
 
-    public StudentServiceJpa(StudentRepositoryJpa studentRepositoryJpa) {
+    public StudentServiceJpa(StudentRepositoryJpa studentRepositoryJpa, ScoreRepositoryJpa scoreRepositoryJpa) {
         this.studentRepositoryJpa = studentRepositoryJpa;
+        this.scoreRepositoryJpa = scoreRepositoryJpa;
     }
 
     @Override
     public List<Score> scoreHistoryByStudentId(long id) {
-        return studentRepositoryJpa.scoreHistoryByStudentId(id).stream().toList();
+        return scoreRepositoryJpa.findByStudentId(id).stream().toList();
     }
     @Override
     public List<Score> scoreHistoryByStudentIdCurrentWeek(long id) {
-        return studentRepositoryJpa.scoreHistoryByStudentId(id).stream()
+        return scoreRepositoryJpa.findByStudentId(id).stream()
                 .filter(score -> score.getAssignDate().isAfter(LocalDate.now().minusDays(7))).toList();
     }
     @Override
@@ -37,6 +40,6 @@ public class StudentServiceJpa implements StudentService{
 
     @Override
     public List<Student> findStudentsByBestSingleScoreAndHouseAndClassId(long houseId, long courseId) {
-        return studentRepositoryJpa.findStudentsByBestSingleScoreAndHouseAndClassId(houseId, courseId);
+        return studentRepositoryJpa.findStudentsByBestSingleScoreAndHouseAndClass(courseId, houseId);
     }
 }

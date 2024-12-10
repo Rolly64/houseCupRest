@@ -3,6 +3,7 @@ package org.generation.italy.houseCupRest.controllers;
 
 
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
+import org.generation.italy.houseCupRest.dtos.StudentDetailDto;
 import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
@@ -10,6 +11,7 @@ import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.ScoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
@@ -47,6 +49,15 @@ public class StudentController {
         return ResponseEntity.ok(StudentDto.fromStudents(students));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable long id){
+        Optional<Student> oSt = registerService.findStudentById(id);
+        if(oSt.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(StudentDetailDto.fromStudent(oSt.get()));
+    }
+
     //history punteggi di uno studente tramite id
     @GetMapping("/{id}/score")
     public ResponseEntity<?> scoreHistory(@PathVariable long id) {
@@ -77,5 +88,11 @@ public class StudentController {
     public ResponseEntity<?> bestStudentsByHouseInAClass(@PathVariable long courseId, @PathVariable long houseId) {
         List<Student> bestStudents = registerService.showBestStudentsByHouseInAClass(courseId, houseId);
         return ResponseEntity.ok(StudentDto.fromStudents(bestStudents));
+    }
+
+    @PostMapping //TODO
+    public ResponseEntity<StudentDetailDto> createStudent(@RequestBody StudentDetailDto dto){
+        Student s = dto.toStudent();
+        return ResponseEntity.ok().build();
     }
 }

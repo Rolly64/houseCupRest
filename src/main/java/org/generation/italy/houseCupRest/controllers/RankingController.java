@@ -25,6 +25,8 @@ public class RankingController {
     @GetMapping
     public ResponseEntity<HouseRankingDto> getRankings(){
         List<HouseRanking> rankings = this.houseService.getRankings();
+        System.out.println("************************");
+        System.out.println(rankings);
         HouseRankingDto dto = new HouseRankingDto(rankings);
         return ResponseEntity.ok(dto);
     }

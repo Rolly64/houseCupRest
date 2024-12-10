@@ -24,7 +24,8 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseDto>> findCourses(@RequestParam(required = false) String className, @RequestParam(required = false) Boolean active){
+    public ResponseEntity<List<CourseDto>> findCourses(@RequestParam(required = false) String className,
+                                                       @RequestParam(required = false) Boolean active){
         List<Course> courses = null;
         if(className!=null && !className.isEmpty() && active!=null && active){
             courses = regService.findActiveCourseByNamesContains(className);

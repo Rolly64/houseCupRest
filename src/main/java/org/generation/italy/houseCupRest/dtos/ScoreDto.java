@@ -14,10 +14,13 @@ public class ScoreDto {
     private String studentFullName;
     private long teacherId;
     private String teacherFullName;
+    private long houseId;
+    private String houseName;
 
     public ScoreDto() {}
 
-    public ScoreDto(long id, int points, String motivation, String assignDate, long studentId, String studentFullName, long teacherId, String teacherFullName) {
+    public ScoreDto(long id, int points, String motivation, String assignDate, long studentId, String studentFullName,
+                    long teacherId, String teacherFullName, long houseId, String houseName) {
         this.id = id;
         this.points = points;
         this.motivation = motivation;
@@ -26,6 +29,8 @@ public class ScoreDto {
         this.studentFullName = studentFullName;
         this.teacherId = teacherId;
         this.teacherFullName = teacherFullName;
+        this.houseId = houseId;
+        this.houseName = houseName;
     }
 
     public ScoreDto (Score score) {
@@ -37,6 +42,8 @@ public class ScoreDto {
         this.studentFullName = String.format("%s %s", score.getStudent().getFirstname(), score.getStudent().getSurname());
         this.teacherId = score.getTeacher().getId();
         this.teacherFullName = String.format("%s %s", score.getTeacher().getFirstname(), score.getTeacher().getSurname());
+        this.houseId = score.getStudent().getHouse().getId();
+        this.houseName = score.getStudent().getHouse().getHouseName();
     }
 
     public Score toScore() {
