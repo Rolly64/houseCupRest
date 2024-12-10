@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@CrossOrigin
 @RequestMapping("/student")
 public class StudentController {
     private RegisterService registerService;

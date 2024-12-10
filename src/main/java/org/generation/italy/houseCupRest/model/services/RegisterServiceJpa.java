@@ -126,12 +126,10 @@ public class RegisterServiceJpa implements RegisterService{
     public List<Student> findStudentsByScoreMotivationLike(String word) {
         return studentRepo.findByScoresMotivationContainingIgnoreCase(word);
     }
-
     @Override
     public List<Student> findStudentByMaxPoints() {
         return studentRepo.findStudentsByBestSingleScore();
     }
-
     @Override
     public List<Student> findStudentsByMaxPointsAndCourseAndHouse(long courseId, long houseId) {
         return studentRepo.findStudentsByBestSingleScoreAndHouseAndClass(courseId, houseId);
