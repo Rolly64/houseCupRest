@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class HouseServiceJpa implements HouseService {
-    HouseRepositoryJpa houseRepo;
+    private HouseRepositoryJpa houseRepo;
 
     public HouseServiceJpa(HouseRepositoryJpa houseRepo) {
         this.houseRepo = houseRepo;
