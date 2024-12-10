@@ -8,19 +8,22 @@ public class HouseDto {
     private long id;
     private String name;
     private int score;
+    private String houseImage;
 
     public HouseDto() {}
-    public HouseDto(long id, String name, int score) {
+    public HouseDto(long id, String name, int score, String houseImage) {
         this.id = id;
         this.name = name;
         this.score = score;
+        this.houseImage = houseImage;
     }
     public HouseDto(House h) {
         this.id = h.getId();
         this.name = h.getHouseName();
+        this.houseImage = h.getHouseImage();
     }
     public static HouseDto fromHouseRanking(HouseRanking hr){
-        return new HouseDto(hr.getHouse().getId(), hr.getHouse().getHouseName(), hr.getTotalScore());
+        return new HouseDto(hr.getHouse().getId(), hr.getHouse().getHouseName(), hr.getTotalScore(), hr.getHouse().getHouseImage());
     }
 
     public long getId() {
@@ -45,5 +48,13 @@ public class HouseDto {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getHouseImage() {
+        return houseImage;
+    }
+
+    public void setHouseImage(String houseImage) {
+        this.houseImage = houseImage;
     }
 }

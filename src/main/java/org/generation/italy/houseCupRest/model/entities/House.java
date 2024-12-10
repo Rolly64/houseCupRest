@@ -35,6 +35,10 @@ public class House {
         return id;
     }
 
+    public String getHouseImage() {
+        return houseImage;
+    }
+
     public String getHouseName() {
         return houseName;
     }
