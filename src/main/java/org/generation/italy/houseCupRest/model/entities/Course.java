@@ -26,7 +26,9 @@ public class Course {
     public Course(){
 
     }
-
+    public Course(long id){
+        this.id= id;
+    }
     public Course(long id, String className) {
         this.id = id;
         this.className = className;

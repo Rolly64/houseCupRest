@@ -1,9 +1,5 @@
 package org.generation.italy.houseCupRest.dtos;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Score;
@@ -12,7 +8,6 @@ import org.generation.italy.houseCupRest.model.entities.Student;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 public class StudentDetailDto {
     private long id;
@@ -25,8 +20,8 @@ public class StudentDetailDto {
     private String background;
     private String education;
     private Boolean isPref;
-    private CourseDto course;
-    private HouseDto house;
+    private long courseId;
+    private long houseId;
     private int totalScores;
 
     public StudentDetailDto() {}
@@ -41,12 +36,12 @@ public class StudentDetailDto {
         this.background = s.getBackground();
         this.education = s.getEducation();
         this.isPref = s.getIsPref();
-        this.course = new CourseDto(s.getCourse());
-        this.house = new HouseDto(s.getHouse());
+        this.courseId = s.getCourse().getId();
+        this.houseId = s.getHouse().getId();
         this.totalScores = s.getScores().stream().mapToInt(Score::getPoints).sum();
     }
     public StudentDetailDto(long id, String firstname, String surname, String dob, char sex, String mail, String phone,
-                            String background, String education, Boolean isPref, CourseDto course, HouseDto house, int totalScores) {
+                            String background, String education, Boolean isPref, long courseId, long houseId, int totalScores) {
         this.id = id;
         this.firstname = firstname;
         this.surname = surname;
@@ -57,8 +52,8 @@ public class StudentDetailDto {
         this.background = background;
         this.education = education;
         this.isPref = isPref;
-        this.course = course;
-        this.house = house;
+        this.courseId = courseId;
+        this.houseId = houseId;
         this.totalScores = totalScores;
     }
 
@@ -74,8 +69,8 @@ public class StudentDetailDto {
                 this.background,
                 this.education,
                 this.isPref,
-                null,
-                null,
+                new Course(this.courseId),
+                new House(this.houseId),
                 new ArrayList<>()
         );
     }
@@ -160,21 +155,18 @@ public class StudentDetailDto {
         isPref = pref;
     }
 
-    public CourseDto getCourse() {
-        return course;
+    public long getCourseId() {
+        return courseId;
     }
 
-    public void setCourse(CourseDto course) {
-        this.course = course;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
-    public HouseDto getHouse() {
-        return house;
+    public long getHouseId() {
+        return houseId;
     }
 
-    public void setHouse(HouseDto house) {
-        this.house = house;
-    }
 
     public int getTotalScores() {
         return totalScores;

@@ -34,7 +34,7 @@ public class StudentController {
     public ResponseEntity<?> createStudent(@RequestBody StudentDetailDto dto, UriComponentsBuilder uriBuilder ){
         Student s = dto.toStudent();
         try{
-        Student saved = regsService.createStudent(s, dto.getHouse().getId(), dto.getCourse().getId());
+        Student saved = regsService.createStudent(s, dto.getHouseId(), dto.getCourseId());
         URI location = uriBuilder.path("/student/{id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).body(saved);
     }catch (EntityNotFoundException e){

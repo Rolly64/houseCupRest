@@ -22,7 +22,9 @@ public class House {
     public House(){
 
     }
-
+    public House(long id){
+        this.id=id;
+    }
     public House(long id, String houseName, String houseImage) {
         this.id = id;
         this.houseName = houseName;
