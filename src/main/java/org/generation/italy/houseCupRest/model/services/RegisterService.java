@@ -19,6 +19,9 @@ public interface RegisterService{
     List<Student> findAllStudents();
     List<Teacher> findAllTeachers(); // ricordiamo di implementare teacher
     Student saveStudent(Student s);
+    Student createStudent(Student toSave, long houseId, long courseId) throws ResourceNotFoundException;
+    void deleteStudent(long id) throws ResourceNotFoundException;
+    void updateStudent(Student s, long houseId, long courseId) throws ResourceNotFoundException;
     Optional<Student> findStudentById(long id);
     Optional<Teacher> findTeacherById(long id);
     Optional<Course> deleteCourseById(long id);
@@ -28,9 +31,10 @@ public interface RegisterService{
     List<Course> findByClassNameContains(String className);
     List<Course> findActiveCourses();
     List<Student> findStudentsWithBestSingleScoreByHouseId(long id) throws IdDoesNotExistException;
-    List<Student> findStudentsWithBestSingleScoreByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException;
+    List<Student> findStudentsWithBestSingleScoreByHouseIdAndClassID(long houseId, long courseId) throws IdDoesNotExistException;
     List<Student> findBestStudentsByHouseId(long id) throws IdDoesNotExistException;
-    List<Student> findBestStudentsByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException;
+    List<Student> findBestStudentsByHouseIdAndClassID(long houseId, long courseId) throws IdDoesNotExistException;
     List<Student> findStudentWithScoreReasonContains(String reason) throws ResourceNotFoundException;
+
 
 }

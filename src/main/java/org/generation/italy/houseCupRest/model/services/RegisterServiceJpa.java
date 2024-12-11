@@ -132,8 +132,8 @@ public class RegisterServiceJpa implements RegisterService{
         return studentRepo.findByBestSingleScoreAndHouseId(id);
     }
     @Override
-    public List<Student> findStudentsWithBestSingleScoreByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException {
-        Optional<Course> opClass = courseRepo.findById(classId);
+    public List<Student> findStudentsWithBestSingleScoreByHouseIdAndClassID(long houseId, long courseId) throws IdDoesNotExistException {
+        Optional<Course> opClass = courseRepo.findById(courseId);
         if (opClass.isEmpty()){
             throw new IdDoesNotExistException("course id not found");
         }
@@ -141,7 +141,7 @@ public class RegisterServiceJpa implements RegisterService{
         if (opHouse.isEmpty()){
             throw new IdDoesNotExistException("house id not found");
         }
-        return studentRepo.findByBestSingleScoreAndHouseIdAndClassId(houseId,classId);
+        return studentRepo.findByBestSingleScoreAndHouseIdAndClassId(houseId, courseId);
     }
 
     @Override
@@ -154,16 +154,16 @@ public class RegisterServiceJpa implements RegisterService{
     }
 
     @Override
-    public List<Student> findBestStudentsByHouseIdAndClassID(long houseId, long classId) throws IdDoesNotExistException {
+    public List<Student> findBestStudentsByHouseIdAndClassID(long houseId, long courseId) throws IdDoesNotExistException {
         Optional<House> opHouse = houseRepo.findById(houseId);
         if (opHouse.isEmpty()){
             throw new IdDoesNotExistException("house id not found");
         }
-        Optional<Course> opClass = courseRepo.findById(classId);
+        Optional<Course> opClass = courseRepo.findById(courseId);
         if (opClass.isEmpty()){
             throw new IdDoesNotExistException("class id not found");
         }
-        return studentRepo.findBestFromHouseAndClass(houseId,classId);
+        return studentRepo.findBestFromHouseAndClass(houseId, courseId);
     }
 
     @Override
@@ -172,5 +172,49 @@ public class RegisterServiceJpa implements RegisterService{
             throw new ResourceNotFoundException("reason is empty");
         }
         return studentRepo.findScoresByReason(reason);
+    }
+
+    @Override
+    public Student createStudent(Student toSave, long houseId, long courseId) throws ResourceNotFoundException{
+        Optional<House> opHouse = houseRepo.findById(houseId);
+        if (opHouse.isEmpty()) {
+            throw new ResourceNotFoundException("house id not found");
+        }
+        Optional<Course> opCourse = courseRepo.findById(courseId);
+        if (opCourse.isEmpty()) {
+            throw new ResourceNotFoundException("course not found");
+        }
+        toSave.setCourse(opCourse.get());
+        toSave.setHouse(opHouse.get());
+        return studentRepo.save(toSave);
+    }
+    @Override
+    public void deleteStudent(long id) throws ResourceNotFoundException{
+        Optional<Student> opStudent = studentRepo.findById(id);
+        if (opStudent.isEmpty()) {
+            throw new ResourceNotFoundException("student not found");
+        }
+        studentRepo.delete(opStudent.get());
+    }
+
+    @Override
+    public void updateStudent(Student s, long houseId, long courseId) throws ResourceNotFoundException {
+        System.out.println(courseId);
+        System.out.println(houseId);
+        Optional<House> optionalHouse = houseRepo.findById(houseId);
+        if (optionalHouse.isEmpty()) {
+            throw new ResourceNotFoundException("house not found");
+        }
+        Optional<Course> optionalCourse = courseRepo.findById(courseId);
+        if (optionalCourse.isEmpty()) {
+            throw new ResourceNotFoundException("class not found");
+        }
+        Optional<Student> opStudent = studentRepo.findById(s.getId());
+        if (opStudent.isEmpty()) {
+            throw new ResourceNotFoundException("student not found");
+        }
+        s.setHouse(optionalHouse.get());
+        s.setCourse(optionalCourse.get());
+        studentRepo.save(s);
     }
 }

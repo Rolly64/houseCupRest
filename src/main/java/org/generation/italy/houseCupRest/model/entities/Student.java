@@ -30,7 +30,7 @@ public class  Student {
     @ManyToOne
     @JoinColumn(name="house_id")
     private House house;
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     private List<Score> scores;
 
     public Student() {

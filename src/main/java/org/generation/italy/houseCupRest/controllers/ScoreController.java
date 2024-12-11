@@ -14,7 +14,7 @@ import java.net.URI;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/score")
+@RequestMapping("/api/score")
 public class ScoreController {
     ScoreService scoreService;
     @Autowired

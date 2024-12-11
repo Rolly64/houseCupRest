@@ -1,6 +1,7 @@
 package org.generation.italy.houseCupRest.controllers;
 
 import org.generation.italy.houseCupRest.dtos.ScoreDto;
+import org.generation.italy.houseCupRest.dtos.StudentDetailsDto;
 import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Score;
 import org.generation.italy.houseCupRest.model.entities.Student;
@@ -13,11 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+
+import static org.springframework.web.servlet.function.ServerResponse.created;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 public class StudentController {
     ScoreService scoreService;
     RegisterService regService;
@@ -101,5 +108,46 @@ public class StudentController {
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+    @PostMapping
+    public ResponseEntity<?> createStudent(@RequestBody StudentDetailsDto dto, UriComponentsBuilder uriBuilder) {
+        Student s = dto.toStudent();
+        try{
+            Student saved = regService.createStudent(s, dto.getHouse().getId(), dto.getCourse().getId());
+            URI location = uriBuilder.path("/student/{id}").buildAndExpand(saved.getId()).toUri();
+            return ResponseEntity.created(location).body(new StudentDetailsDto(saved));
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable long id) {
+        try {
+            regService.deleteStudent(id);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateStudent(@PathVariable long id, @RequestBody StudentDetailsDto dto) {
+        if (id != dto.getId()) {
+            return ResponseEntity.badRequest().body("id nel path e nell'oggetto non coincidono");
+        }
+        try {
+            Student s = dto.toStudent();
+            regService.updateStudent(s, dto.getHouse().getId(), dto.getCourse().getId());
+            return ResponseEntity.ok(new StudentDetailsDto(s));
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable long id) {
+        Optional<Student> opStudent = regService.findStudentById(id);
+        if (opStudent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new StudentDetailsDto(opStudent.get()));
     }
 }

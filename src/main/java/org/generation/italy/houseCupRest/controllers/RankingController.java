@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/ranking")
+@RequestMapping("/api/ranking")
 public class RankingController {
     HouseService houseService;
     ScoreService scoreService;
