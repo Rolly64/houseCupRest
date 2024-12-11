@@ -1,15 +1,17 @@
 package org.generation.italy.houseCupRest.controllers;
+import org.generation.italy.houseCupRest.dtos.StudentDetailDto;
 import org.generation.italy.houseCupRest.dtos.StudentDto;
 import org.generation.italy.houseCupRest.model.entities.Student;
+import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.services.RegisterService;
 import org.generation.italy.houseCupRest.model.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
@@ -27,5 +29,16 @@ public class StudentController {
         List<Student> students = this.studentService.getAllStudent();
         List<StudentDto> dto = students.stream().map(StudentDto::new).toList();
         return ResponseEntity.ok(dto);
+    }
+    @PostMapping
+    public ResponseEntity<?> createStudent(@RequestBody StudentDetailDto dto, UriComponentsBuilder uriBuilder ){
+        Student s = dto.toStudent();
+        try{
+        Student saved = regsService.createStudent(s, dto.getHouse().getId(), dto.getCourse().getId());
+        URI location = uriBuilder.path("/student/{id}").buildAndExpand(saved.getId()).toUri();
+        return ResponseEntity.created(location).body(saved);
+    }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 }

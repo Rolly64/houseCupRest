@@ -4,6 +4,8 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +26,5 @@ public interface RegisterService{
     List<Course> findActiveCourseByNamesContains(String className);
     List<Course> findByClassNameContains(String className);
     List<Course> findActiveCourses();
+    Student createStudent(Student toSave, long houseId, long courseId) throws EntityNotFoundException;
 }

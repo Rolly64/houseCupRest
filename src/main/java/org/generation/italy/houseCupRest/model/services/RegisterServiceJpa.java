@@ -4,11 +4,13 @@ import org.generation.italy.houseCupRest.model.entities.Course;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.entities.Student;
 import org.generation.italy.houseCupRest.model.entities.Teacher;
+import org.generation.italy.houseCupRest.model.exceptions.EntityNotFoundException;
 import org.generation.italy.houseCupRest.model.repositories.CourseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.StudentRepositoryJpa;
 import org.generation.italy.houseCupRest.model.repositories.TeacherRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -113,5 +115,21 @@ public class RegisterServiceJpa implements RegisterService{
     @Override
     public List<Course> findActiveCourses() {
         return courseRepo.findByStartDateBeforeAndEndDateAfter(LocalDate.now(),LocalDate.now());
+    }
+
+    @Override
+    public Student createStudent(Student toSave, long houseId, long courseId) throws EntityNotFoundException {
+        Optional<House> opHouse = houseRepo.findById(houseId);
+        if(opHouse.isEmpty()){
+            throw new EntityNotFoundException("house is not found");
+        }
+        Optional<Course> opCourse = courseRepo.findById(courseId);
+        if(opCourse.isEmpty()){
+            throw new EntityNotFoundException("course is not found");
+        }
+        toSave.setCourse(opCourse.get());
+        toSave.setHouse(opHouse.get());
+        studentRepo.save(toSave);
+        return toSave;
     }
 }
