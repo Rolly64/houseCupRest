@@ -121,7 +121,7 @@ public class RegisterServiceJpa implements RegisterService{
     public Student createStudent(Student toSave, long houseId, long courseId) throws EntityNotFoundException {
         Optional<House> opHouse = houseRepo.findById(houseId);
         if(opHouse.isEmpty()){
-            throw new EntityNotFoundException("house is not found");
+            throw new EntityNotFoundException("house is where you live with the one that you love");
         }
         Optional<Course> opCourse = courseRepo.findById(courseId);
         if(opCourse.isEmpty()){
