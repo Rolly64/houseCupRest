@@ -1,5 +1,6 @@
 package org.generation.italy.houseCupRest.model.services;
 
+import org.generation.italy.houseCupRest.dtos.HouseDto;
 import org.generation.italy.houseCupRest.model.HouseRanking;
 import org.generation.italy.houseCupRest.model.entities.House;
 import org.generation.italy.houseCupRest.model.repositories.HouseRepositoryJpa;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 @Service
 public class HouseServiceJpa implements HouseService {
-    HouseRepositoryJpa houseRepo;
+    private HouseRepositoryJpa houseRepo;
 
     public HouseServiceJpa(HouseRepositoryJpa houseRepo) {
         this.houseRepo = houseRepo;
@@ -25,5 +26,10 @@ public class HouseServiceJpa implements HouseService {
             rankings.add(ranking);
         }
         return rankings;
+    }
+
+    @Override
+    public List<House> getAll() {
+        return houseRepo.findAll();
     }
 }
