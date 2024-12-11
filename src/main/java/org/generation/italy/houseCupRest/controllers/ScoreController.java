@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/score")
+@RequestMapping("/api/score")
 public class ScoreController {
     private  ScoreService sService;
     private RegisterService regsService;

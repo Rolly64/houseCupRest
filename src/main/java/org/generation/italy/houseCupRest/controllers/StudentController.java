@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/api/student")
 public class StudentController {
     private StudentService studentService;
     private RegisterService regsService;

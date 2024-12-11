@@ -14,7 +14,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
-@RequestMapping("/house")
+@RequestMapping("/api/house")
 public class HouseController {
     HouseService houseService;
     @Autowired
