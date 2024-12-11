@@ -19,6 +19,7 @@ public class StudentDto {
         this.surname = s.getSurname();
     }
 
+
     public long getId() {
         return id;
     }
@@ -42,5 +43,7 @@ public class StudentDto {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+
+
 }
 
